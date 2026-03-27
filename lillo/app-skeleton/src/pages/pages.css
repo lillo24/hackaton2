@@ -721,9 +721,11 @@
 
 .dashboard-priority-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(210px, 0.9fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.85rem;
   align-items: stretch;
+  width: min(100%, 980px);
+  align-self: center;
 }
 
 .dashboard-priority-grid .section-card {
