@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import IntroTerminal from '../components/IntroTerminal';
 import PhoneFrame from '../components/PhoneFrame';
 import RoadmapPresentation from './RoadmapPresentation';
@@ -63,6 +63,11 @@ const previewModes = [
   { id: 'desktop', label: 'Desktop' },
   { id: 'roadmap', label: 'Roadmap' },
 ];
+const previewModeIds = new Set(previewModes.map((mode) => mode.id));
+
+function resolvePreviewMode(modeParam) {
+  return previewModeIds.has(modeParam) ? modeParam : 'phone';
+}
 
 function NavIcon({ icon }) {
   if (icon === 'dashboard') {
@@ -144,9 +149,10 @@ function PreviewApp({ previewMode }) {
 function AppShell({ alerts = [] }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const stageRef = useRef(null);
   const phoneFrameRef = useRef(null);
-  const [previewMode, setPreviewMode] = useState('phone');
+  const [previewMode, setPreviewMode] = useState(() => resolvePreviewMode(searchParams.get('mode')));
   const [startupSequencePending, setStartupSequencePending] = useState(
     location.pathname === '/' || location.pathname === '/dashboard',
   );
@@ -163,6 +169,19 @@ function AppShell({ alerts = [] }) {
   const shouldQueueTerminalIntro = shouldHoldIntroStage && !phoneStartupShouldBegin;
   const isTerminalIntroActive = isPhonePreview && isDashboardRoute && terminalPhase !== 'hidden';
   const canStartTerminalSequence = shouldQueueTerminalIntro && terminalPhase === 'visible';
+
+  useEffect(() => {
+    setPreviewMode(resolvePreviewMode(searchParams.get('mode')));
+  }, [searchParams]);
+
+  function updatePreviewMode(nextMode) {
+    setPreviewMode(nextMode);
+    setSearchParams((currentParams) => {
+      const nextParams = new URLSearchParams(currentParams);
+      nextParams.set('mode', nextMode);
+      return nextParams;
+    });
+  }
 
   useLayoutEffect(() => {
     if (!isPhonePreview) {
@@ -247,7 +266,7 @@ function AppShell({ alerts = [] }) {
   }, [canStartTerminalSequence]);
 
   function handleReplayIntro() {
-    setPreviewMode('phone');
+    updatePreviewMode('phone');
     setStartupSequencePending(true);
     setPhoneStartupShouldBegin(false);
     setTerminalPhase('hidden');
@@ -325,7 +344,7 @@ function AppShell({ alerts = [] }) {
                 aria-selected={isActive}
                 className={`app-shell__mode-toggle-button${isActive ? ' is-active' : ''}`}
                 key={mode.id}
-                onClick={() => setPreviewMode(mode.id)}
+                onClick={() => updatePreviewMode(mode.id)}
                 role="tab"
                 type="button"
               >
