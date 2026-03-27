@@ -82,6 +82,18 @@ function classifyAlert(alert) {
   return 'monitor';
 }
 
+function matchesSelectedFilters(alert, severityFilter, sourceFilter) {
+  if (severityFilter !== 'all' && alert.severity !== severityFilter) {
+    return false;
+  }
+
+  if (sourceFilter !== 'all' && !alert.sourceIds.includes(sourceFilter)) {
+    return false;
+  }
+
+  return true;
+}
+
 function AlertsLoadingState() {
   return (
     <div className="alert-list">
@@ -135,53 +147,49 @@ function AlertsPage({
   const severityFilter = readFilter(searchParams, 'severity', alertSeverityScale);
   const sourceFilter = readFilter(searchParams, 'source', sourceOptions.map((source) => source.id));
   const historyEnabled = searchParams.get('history') === '1';
-  const filteredAlerts = useMemo(
-    () => {
-      const baseAlerts = rankedAlerts.filter((alert) => {
-        if (severityFilter !== 'all' && alert.severity !== severityFilter) {
+  const filteredCurrentAlerts = useMemo(
+    () =>
+      rankedAlerts.filter((alert) => {
+        if (!matchesSelectedFilters(alert, severityFilter, sourceFilter)) {
           return false;
         }
 
-        if (sourceFilter !== 'all' && !alert.sourceIds.includes(sourceFilter)) {
-          return false;
-        }
-
-        return true;
-      });
-
-      if (!historyEnabled) {
-        return baseAlerts;
+        return classifyAlert(alert) !== 'resolved';
+      }),
+    [rankedAlerts, severityFilter, sourceFilter],
+  );
+  const filteredHistoryAlerts = useMemo(() => {
+    const resolvedFeedAlerts = rankedAlerts.filter((alert) => {
+      if (!matchesSelectedFilters(alert, severityFilter, sourceFilter)) {
+        return false;
       }
 
-      const visibleHistoryAlerts = historyAlerts.filter((alert) => {
-        if (severityFilter !== 'all' && alert.severity !== severityFilter) {
-          return false;
-        }
+      return classifyAlert(alert) === 'resolved';
+    });
 
-        if (sourceFilter !== 'all' && !alert.sourceIds.includes(sourceFilter)) {
-          return false;
-        }
+    const archivedHistoryAlerts = historyAlerts.filter((alert) => matchesSelectedFilters(alert, severityFilter, sourceFilter));
 
-        return true;
-      });
-
-      return [...baseAlerts, ...visibleHistoryAlerts];
-    },
-    [historyAlerts, historyEnabled, rankedAlerts, severityFilter, sourceFilter],
-  );
-  const groupedAlerts = useMemo(() => {
+    return [...resolvedFeedAlerts, ...archivedHistoryAlerts];
+  }, [historyAlerts, rankedAlerts, severityFilter, sourceFilter]);
+  const filteredAlerts = historyEnabled ? filteredHistoryAlerts : filteredCurrentAlerts;
+  const groupedCurrentAlerts = useMemo(() => {
     const nextGroups = {
       actionNow: [],
       monitor: [],
-      resolved: [],
     };
 
-    filteredAlerts.forEach((alert) => {
-      nextGroups[classifyAlert(alert)].push(alert);
+    filteredCurrentAlerts.forEach((alert) => {
+      const bucket = classifyAlert(alert);
+
+      if (bucket === 'resolved') {
+        return;
+      }
+
+      nextGroups[bucket].push(alert);
     });
 
     return nextGroups;
-  }, [filteredAlerts]);
+  }, [filteredCurrentAlerts]);
 
   const returnTo = `${location.pathname}${location.search}`;
 
@@ -295,10 +303,10 @@ function AlertsPage({
           </label>
 
           <div className="filter-field filter-field--toggle">
-            <span>Storico</span>
+            <span>Solo storico</span>
             <button
               aria-checked={historyEnabled}
-              aria-label={`Storico ${historyEnabled ? 'attivo' : 'disattivato'}`}
+              aria-label={`Solo storico ${historyEnabled ? 'attivo' : 'disattivato'}`}
               className={`filter-toggle${historyEnabled ? ' is-active' : ''}`}
               onClick={toggleHistory}
               role="switch"
@@ -322,33 +330,46 @@ function AlertsPage({
       ) : null}
 
       {!isLoading && alerts.length > 0 && filteredAlerts.length === 0 ? (
-        <SectionCard subtitle="No alerts match the current filter selection." title="No results for filters">
-          <p className="detail-text">Try widening severity, source, or relevance to recover the full operational feed.</p>
+        <SectionCard
+          subtitle="No alerts match the current filter selection."
+          title={historyEnabled ? 'No history results for filters' : 'No results for filters'}
+        >
+          <p className="detail-text">
+            {historyEnabled
+              ? 'Try widening severity or source to recover historical alerts.'
+              : 'Try widening severity or source to recover the current operational feed.'}
+          </p>
         </SectionCard>
       ) : null}
 
       {!isLoading && filteredAlerts.length > 0 ? (
         <div className="alert-groups">
-          {renderAlertGroup({
-            title: 'Needs action now',
-            subtitle: 'Critical and active signals that should drive the immediate response queue.',
-            alertsInGroup: groupedAlerts.actionNow,
-            startIndex: 0,
-            showHeader: false,
-          })}
-          {renderAlertGroup({
-            title: 'Monitor',
-            subtitle: 'Signals that are stable enough for watch-mode and scheduled checks.',
-            alertsInGroup: groupedAlerts.monitor,
-            startIndex: groupedAlerts.actionNow.length,
-            showHeader: false,
-          })}
-          {renderAlertGroup({
-            title: 'Recently resolved',
-            subtitle: 'Closed signals kept visible for context and post-action confirmation.',
-            alertsInGroup: groupedAlerts.resolved,
-            startIndex: groupedAlerts.actionNow.length + groupedAlerts.monitor.length,
-          })}
+          {historyEnabled
+            ? renderAlertGroup({
+                title: 'History',
+                subtitle: 'Historical alerts feed.',
+                alertsInGroup: filteredHistoryAlerts,
+                startIndex: 0,
+                showHeader: false,
+              })
+            : (
+              <>
+                {renderAlertGroup({
+                  title: 'Needs action now',
+                  subtitle: 'Critical and active signals that should drive the immediate response queue.',
+                  alertsInGroup: groupedCurrentAlerts.actionNow,
+                  startIndex: 0,
+                  showHeader: false,
+                })}
+                {renderAlertGroup({
+                  title: 'Monitor',
+                  subtitle: 'Signals that are stable enough for watch-mode and scheduled checks.',
+                  alertsInGroup: groupedCurrentAlerts.monitor,
+                  startIndex: groupedCurrentAlerts.actionNow.length,
+                  showHeader: false,
+                })}
+              </>
+            )}
         </div>
       ) : null}
     </div>

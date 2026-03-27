@@ -29,7 +29,7 @@ Non-obvious behavior
 - Alert filters are URL-backed (`severity`, `source`, `history`) so list context survives navigation.
 - The filter strip intentionally avoids top labels and per-view totals, exposing only minimal controls (including a `history` toggle).
 - The alert filter strip is sticky and full-bleed at the top of the scrollable page area, so controls remain visible and visually detached from card-width constraints.
-- The `history` toggle appends a local fake archived alert card used for pitch/demo context; it is intentionally muted and non-interactive.
+- The `history` toggle switches the feed to history-only mode (resolved alerts plus a local archived demo card) and hides current action/monitor alerts until toggled off.
 - `AlertsPage` keeps top-priority and non-critical alerts directly in-feed (without titled wrappers); alert opens now route through `/alerts/:alertId` first so the app can hydrate selected-alert state before redirecting to the dedicated `/alert` page.
 - `AlertDetailPage` reads only that selected-alert state and intentionally shows a quiet empty placeholder if nothing is selected yet.
 - `AlertDetailPage` now uses the shared `AlertDetailBlock`: the title sits inside a severity-tinted hero, the timestamp stays in the top-right metadata row, the field line stays inline under the summary, the existing blue `New notification` cue is preserved through a top-badge slot, and `Integrated` is now the only collapsible roadmap section while still keeping the follow-up relevance note under it.
