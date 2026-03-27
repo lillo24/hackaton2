@@ -724,15 +724,20 @@
   grid-template-columns: minmax(0, 1fr);
   gap: 0.85rem;
   align-items: stretch;
-  width: 100%;
-  align-self: stretch;
+  width: min(100%, 980px);
+  align-self: center;
 }
 
 .dashboard-priority-grid .section-card {
   height: 100%;
 }
 
-.dashboard-priority-grid__assistant .section-card {
+.mobile-app--desktop .dashboard-priority-grid {
+  width: 100%;
+  align-self: stretch;
+}
+
+.mobile-app--desktop .dashboard-priority-grid__assistant .section-card {
   padding: 0;
   border-radius: 0;
   background: transparent;
@@ -1218,6 +1223,10 @@
 .mobile-app--phone .dashboard-page .soil-pillar__well,
 .mobile-app--phone .dashboard-page .soil-pillar__fill {
   border-radius: 0;
+}
+
+.mobile-app--phone .diagnosis-problem {
+  grid-template-columns: 1fr;
 }
 
 .mobile-app__content {
