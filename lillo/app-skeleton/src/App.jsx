@@ -70,8 +70,8 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/admin" element={<AdminPage />} />
-      <Route path="/admin/customers/:customerId" element={<AdminCustomerPage />} />
+      <Route path="/consorzio" element={<AdminPage />} />
+      <Route path="/consorzio/customers/:customerId" element={<AdminCustomerPage />} />
       <Route element={<AppShell selectedFarm={selectedFarm} alerts={alerts} />}>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route

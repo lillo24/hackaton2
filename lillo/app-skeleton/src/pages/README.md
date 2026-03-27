@@ -1,12 +1,12 @@
 # Pages Map
 
-Status: `DRAFT` because the dashboard/alert/admin route composition is in place, but visual QA still relies on manual checks.
+Status: `DRAFT` because the dashboard/alert/consorzio route composition is in place, but visual QA still relies on manual checks.
 
 Files
 - `README.md` (`STABLE`) - folder map for route-level screens and behavior notes.
-- `adminAccess.jsx` (`STABLE`) - admin-route-only support module that owns the temporary document overflow override used by standalone admin pages.
-- `AdminPage.jsx` (`DRAFT`) - standalone `/admin` azienda console kept outside the farmer `AppShell`; it owns memoized search/filter/sort controls, the sticky filter-toolbar wrapper, and card navigation into customer detail.
-- `AdminCustomerPage.jsx` (`DRAFT`) - standalone `/admin/customers/:customerId` customer detail view that derives active summary counts from non-resolved customer alerts, adapts admin alert records into the shared alert-detail structure, and renders each customer alert as a collapsed-by-default expandable card.
+- `adminAccess.jsx` (`STABLE`) - admin-route-only support module that owns the temporary document overflow override used by standalone consorzio pages.
+- `AdminPage.jsx` (`DRAFT`) - standalone `/consorzio` consorzio console kept outside the farmer `AppShell`; it owns memoized search/filter/sort controls, the sticky filter-toolbar wrapper, severity-weighted customer ordering, and card navigation into customer detail.
+- `AdminCustomerPage.jsx` (`DRAFT`) - standalone `/consorzio/customers/:customerId` customer detail view that derives active summary counts from non-resolved customer alerts, adapts admin alert records into the shared alert-detail structure, and renders each customer alert as a collapsed-by-default expandable card.
 - `DashboardPage.jsx` (`DRAFT`) - home route that now embeds the same `Giorgio's farm` profile block with floating critical/medium summary chips in the open bottom-left slot, then shows the enlarged white-theme simulated chatbot recap addressed directly to Giorgio instead of the raw farm-type label.
 - `AlertsPage.jsx` (`DRAFT`) - ranked alerts feed with URL-backed filters, a flatter filter strip, and click-to-select behavior for the dedicated alert detail route.
 - `AlertDetailPage.jsx` (`DRAFT`) - dedicated `/alert` detail destination that renders the app-selected alert or a quiet empty state when nothing is selected, now routing only the vineyard `humidity-spike` Peronospora case to a dedicated diagnosis-flow layout while keeping all other alerts on the shared `AlertDetailBlock`.
@@ -15,17 +15,18 @@ Files
 
 Why these live together
 - These files own route-level screens, not reusable primitives.
-- The imported admin surface stays in this folder because it is route-level UI.
-- Shared page CSS keeps route-specific layout rules, including the admin surface, separate from shell and component-level styles.
+- The imported consorzio surface stays in this folder because it is route-level UI.
+- Shared page CSS keeps route-specific layout rules, including the consorzio surface, separate from shell and component-level styles.
 
 Non-obvious behavior
-- `AdminPage` and `AdminCustomerPage` are intentionally routed outside `AppShell`, so the farmer phone shell and bottom navigation never render on `/admin`.
+- `AdminPage` and `AdminCustomerPage` are intentionally routed outside `AppShell`, so the farmer phone shell and bottom navigation never render on `/consorzio`.
 - Admin routes temporarily add an `admin-route` class to `html`, `body`, and `#root`, so the document can scroll normally while the farmer preview shell keeps global overflow locked.
 - `AdminPage` keeps the filter `SectionCard` inside a sticky wrapper so the controls pin to the top of the viewport after scroll while preserving the existing card layout and mobile stacking.
-- The imported admin routes open immediately with no local auth check or passcode UI; they only keep the standalone admin document-scroll override.
-- `AdminCustomerPage` intentionally normalizes incomplete admin alert fields (`fieldName`, relative times, missing `sources`, missing integrated copy) into the shared alert-detail shape so the donor admin detail stays visually aligned with the farmer template without rendering any action block.
+- `AdminPage` sort order now prioritizes a severity-weighted alert load (`critical=8`, `high=4`, `medium=2`, `low=1`); raw `activeAlerts` is only used as a tie-breaker for the weighted sort modes.
+- The imported consorzio routes open immediately with no local auth check or passcode UI; they only keep the standalone admin document-scroll override.
+- `AdminCustomerPage` intentionally normalizes incomplete admin alert fields (`fieldName`, relative times, missing `sources`, missing integrated copy) into the shared alert-detail shape so the donor consorzio detail stays visually aligned with the farmer template without rendering any action block.
 - Admin customer alerts are intentionally collapsed by default and expand per-card with a local button state, while the farmer `/alert` detail route keeps its always-open hero plus nested `Integrated` accordion behavior.
-- The shell-level `Admin page` button is only an entry shortcut; once on admin routes, navigation stays inside the standalone admin header actions instead of the farmer preview shell.
+- The shell-level `Consorzio page` button is only an entry shortcut; once on consorzio routes, navigation stays inside the standalone header actions instead of the farmer preview shell.
 - `AlertsPage` ranking uses weighted urgency: severity, farm relevance, status urgency, then recency as tie influence.
 - Alert filters are URL-backed (`severity`, `source`, `history`) so list context survives navigation.
 - The filter strip intentionally avoids top labels and per-view totals, exposing only minimal controls (including a `history` toggle).

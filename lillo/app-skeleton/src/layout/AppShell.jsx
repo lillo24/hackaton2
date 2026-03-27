@@ -385,8 +385,8 @@ function AppShell({ alerts = [] }) {
           })}
         </div>
 
-        <Link className="app-shell__utility-link app-shell__utility-link--admin" to="/admin">
-          Pagina admin
+        <Link className="app-shell__utility-link app-shell__utility-link--admin" to="/consorzio">
+          Pagina consorzio
         </Link>
 
         {isPhonePreview ? (
