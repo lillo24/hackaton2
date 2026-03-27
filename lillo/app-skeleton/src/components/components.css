@@ -482,19 +482,19 @@
 }
 
 .farm-visual-card__terrain-treatment--relief .farm-visual-card__terrain-pattern-layer {
-  opacity: 0.94;
+  opacity: 1;
 }
 
 .farm-visual-card__terrain-treatment--relief .farm-visual-card__terrain-toplight {
-  opacity: 0.58;
+  opacity: 0.5;
 }
 
 .farm-visual-card__terrain-treatment.is-preview.farm-visual-card__terrain-treatment--relief {
-  opacity: 0.9;
+  opacity: 0.96;
 }
 
 .farm-visual-card__terrain-treatment.is-preview.farm-visual-card__terrain-treatment--relief .farm-visual-card__terrain-base {
-  fill: rgba(112, 79, 40, 0.2);
+  fill: rgba(104, 71, 34, 0.26);
 }
 
 .farm-visual-card__terrain-treatment.is-problem.farm-visual-card__terrain-treatment--relief .farm-visual-card__terrain-pattern-layer {
@@ -547,7 +547,7 @@
 
 .farm-visual-card__snowfall.is-problem {
   opacity: 1;
-  filter: drop-shadow(0 0 1.5px rgba(218, 238, 255, 0.5));
+  filter: drop-shadow(0 0 2.2px rgba(218, 238, 255, 0.62));
 }
 
 .farm-visual-card__snowflake {
@@ -558,23 +558,23 @@
 .farm-visual-card__snowflake path {
   fill: none;
   stroke: rgba(255, 255, 255, 0.94);
-  stroke-width: 0.9;
+  stroke-width: 0.96;
   stroke-linecap: round;
-  filter: drop-shadow(0 0 2.4px rgba(225, 241, 255, 0.76));
+  filter: drop-shadow(0 0 2.8px rgba(225, 241, 255, 0.82));
 }
 
 .farm-visual-card__snowfall.is-problem .farm-visual-card__snowflake path {
   stroke: rgba(255, 255, 255, 1);
-  stroke-width: 1.1;
-  filter: drop-shadow(0 0 3.2px rgba(230, 244, 255, 0.9));
+  stroke-width: 1.22;
+  filter: drop-shadow(0 0 3.8px rgba(230, 244, 255, 0.96));
 }
 
 .farm-visual-card__snowflake--2 path {
-  stroke-width: 0.84;
+  stroke-width: 0.92;
 }
 
 .farm-visual-card__snowflake--3 path {
-  stroke-width: 0.8;
+  stroke-width: 0.88;
 }
 
 .farm-visual-card__tile-status {
@@ -1148,7 +1148,7 @@
   }
 
   65% {
-    opacity: 0.78;
+    opacity: 0.86;
   }
 
   100% {

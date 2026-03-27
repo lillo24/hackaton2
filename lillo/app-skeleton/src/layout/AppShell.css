@@ -4,10 +4,14 @@
   --phone-available-height: calc(100dvh - 8.5rem);
   --toggle-shrink-duration: 0.24s;
   --toggle-shift-duration: 0.52s;
+  --toggle-step-gap: 0.08s;
+  --toggle-shift-delay: calc(var(--toggle-shrink-duration) + var(--toggle-step-gap));
   --toggle-motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --toggle-shift-ease: cubic-bezier(0.18, 0.86, 0.28, 1);
   --toggle-button-duration: 0.34s;
   --toggle-button-ease: cubic-bezier(0.24, 0.9, 0.32, 1);
+  --roadmap-toggle-left: clamp(0.75rem, 2vw, 1.2rem);
+  --roadmap-toggle-top: clamp(0.55rem, 2vh, 1rem);
   --preview-slide-duration: 0.68s;
   --preview-slide-ease: cubic-bezier(0.18, 0.86, 0.3, 1);
   height: 100vh;
@@ -32,25 +36,39 @@
   gap: 0.7rem;
   flex-wrap: wrap;
   min-height: 2.6rem;
+  transform: translateX(0);
   transition:
-    justify-content var(--toggle-shift-duration) var(--toggle-shift-ease),
+    transform var(--toggle-shift-duration) var(--toggle-shift-ease),
     padding-inline var(--toggle-shift-duration) var(--toggle-shift-ease);
 }
 
 .app-shell__top-toggle--roadmap {
-  /* Enter roadmap in two beats: shrink first, then slide the wrapper left. */
-  transition-delay: var(--toggle-shrink-duration), var(--toggle-shrink-duration);
+  /* Enter roadmap in two beats: shrink first, then slide the whole toggle cluster left. */
+  transition-delay: var(--toggle-shift-delay), var(--toggle-shift-delay);
   justify-content: flex-start;
-  padding-inline-start: clamp(0rem, 1vw, 0.55rem);
+  padding-inline-start: 0;
 }
 
 .app-shell--roadmap .app-shell__top-toggle {
   position: fixed;
-  top: clamp(0.55rem, 2vh, 1rem);
-  left: clamp(0.75rem, 2vw, 1.2rem);
+  top: var(--roadmap-toggle-top);
+  left: var(--roadmap-toggle-left);
+  width: max-content;
   min-height: 0;
   padding: 0;
   z-index: 20;
+  animation: app-shell-roadmap-toggle-shift var(--toggle-shift-duration) var(--toggle-shift-ease) both;
+  animation-delay: var(--toggle-shift-delay);
+}
+
+@keyframes app-shell-roadmap-toggle-shift {
+  from {
+    transform: translateX(calc(50vw - var(--roadmap-toggle-left) - 50%));
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
 .app-shell__mode-toggle {
@@ -531,6 +549,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .app-shell__top-toggle,
+  .app-shell__mode-toggle {
+    transition-duration: 0.01ms;
+  }
+
+  .app-shell--roadmap .app-shell__top-toggle {
+    animation: none;
+  }
+
   .app-shell__preview-carousel-track,
   .app-shell__preview-card {
     transition-duration: 0.01ms;
@@ -573,6 +600,8 @@
   .app-shell {
     --phone-available-height: calc(100dvh - 7.35rem);
     --shell-padding-bottom: 0.85rem;
+    --roadmap-toggle-left: 0.55rem;
+    --roadmap-toggle-top: 0.52rem;
     gap: 0.55rem;
   }
 
@@ -590,11 +619,6 @@
 
   .app-shell__top-toggle--roadmap {
     padding-inline-start: 0;
-  }
-
-  .app-shell--roadmap .app-shell__top-toggle {
-    top: 0.52rem;
-    left: 0.55rem;
   }
 
   .app-shell__mode-toggle--roadmap {

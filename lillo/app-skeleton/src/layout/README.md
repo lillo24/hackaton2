@@ -32,5 +32,6 @@ Non-obvious behavior
 - `RoadmapPresentation` measures the rendered positions of Company, Consorzio, and farmer nodes to draw connector paths, so the network stays aligned after resize and in full-screen desktop presentation mode.
 - After the network distribution step, `RoadmapPresentation` automatically runs two farmer identikit bursts in sequence (top farmer, then third farmer), and the next click shifts the network upward into a featured-farmer example stage before the cost overlay step.
 - In `Roadmap` mode, the shell switches to a single full-bleed stage with no outer container; the preview-mode toggle becomes fixed/overlayed at the top-left and does not consume layout space.
+- Entering `Roadmap` now uses a two-step toggle transition on purpose: the mode pill shrinks first, then (after a short `80ms` beat) the whole top-toggle cluster slides from center to the pinned top-left position.
 - Final roadmap step overlays a compact visual estimate panel (`time + cost`) inside the same canvas, while dimming the network layer to keep focus on costs.
 - The shell applies a route-aware scroll-container variant so `/alerts` hides the vertical scrollbar track while preserving scroll interaction.
