@@ -48,17 +48,17 @@ function minutesAgoLabel(minutesAgo) {
   }
 
   if (minutesAgo < 60) {
-    return `${minutesAgo} min ago`;
+    return `${minutesAgo} min fa`;
   }
 
   const hours = Math.floor(minutesAgo / 60);
   const remainingMinutes = minutesAgo % 60;
 
   if (remainingMinutes === 0) {
-    return `${hours} hr ago`;
+    return `${hours} h fa`;
   }
 
-  return `${hours} hr ${remainingMinutes} min ago`;
+  return `${hours} h ${remainingMinutes} min fa`;
 }
 
 function minutesAgoClock(minutesAgo) {

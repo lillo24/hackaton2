@@ -316,12 +316,12 @@ export const alertTemplates = [
       greenhouse: 'greenhouse-bay-2',
     },
     titles: {
-      vineyard: 'Sunburn risk',
+      vineyard: 'Rischio di scottatura',
       'open-field': 'Irrigation drift',
       greenhouse: 'Nutrient feed timing drift',
     },
     summaries: {
-      vineyard: 'Sensors and forecast both point to strong afternoon heat on the most exposed bunches.',
+      vineyard: 'Sia i sensori sia le previsioni indicano un forte caldo pomeridiano sui grappoli piu esposti.',
       'open-field': 'Moisture variance between west-side zones now exceeds the preferred irrigation spread.',
       greenhouse: 'The indoor nutrient cycle is lagging, which risks uneven uptake across the bay.',
     },
@@ -392,12 +392,12 @@ export const alertTemplates = [
       'open-field': 'openfield-central-band',
     },
     titles: {
-      vineyard: 'Canopy stress',
+      vineyard: 'Stress della chioma',
       orchard: 'Fruit-zone heat load',
       'open-field': 'Vegetation stress',
     },
     summaries: {
-      vineyard: 'The exposed rows are warming faster than the shaded side, hinting at uneven vine load.',
+      vineyard: 'I filari piu esposti si stanno scaldando piu rapidamente del lato in ombra, segnalando un carico non uniforme delle viti.',
       orchard: 'South-facing rows are accumulating heat faster than the rest of the orchard block.',
       'open-field': 'Satellite and sensor signals both point to a mild stress band forming in the center plot.',
     },
