@@ -13,7 +13,7 @@ const localizedAssistantFieldPhrases = {
     subject: 'la parcella nord del vigneto',
     location: 'nella parcella nord del vigneto',
   },
-  'Lower Terrace': {
+  'Terrazza inferiore': {
     subject: 'la terrazza inferiore',
     location: 'nella terrazza inferiore',
   },

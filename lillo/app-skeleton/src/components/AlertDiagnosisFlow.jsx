@@ -1,4 +1,5 @@
 import StatusBadge from './StatusBadge';
+import SourceIcon from './SourceIcon';
 
 function formatFieldLabel(field) {
   if (!field?.name) {
@@ -30,6 +31,14 @@ function toItalianTimestamp(label) {
   }
 
   return label;
+}
+
+function resolveSignalIconType(item) {
+  if (item?.type) {
+    return item.type;
+  }
+
+  return 'sensor';
 }
 
 function AlertDiagnosisFlow({ alert, profile, topBadges = [] }) {
@@ -103,8 +112,13 @@ function AlertDiagnosisFlow({ alert, profile, topBadges = [] }) {
         <ul className="diagnosis-signal-list">
           {signalItems.map((item) => (
             <li className="diagnosis-signal-list__item" key={item.label}>
-              <h3>{item.label}</h3>
-              <p>{item.description}</p>
+              <div className="diagnosis-signal-list__copy">
+                <h3>{item.label}</h3>
+                <p>{item.description}</p>
+              </div>
+              <span className="diagnosis-signal-list__icon" aria-hidden="true">
+                <SourceIcon type={resolveSignalIconType(item)} />
+              </span>
             </li>
           ))}
         </ul>

@@ -29,14 +29,17 @@ const DIAGNOSIS_FLOW_PRESETS = [
       signalItems: [
         {
           label: 'Meteo',
+          type: 'weather',
           description: 'Pioggia recente e condizioni di scarsa asciugatura.',
         },
         {
           label: 'Sensori chioma',
+          type: 'sensor',
           description: 'Bagnatura fogliare persistente dopo l evento di pioggia.',
         },
         {
           label: 'Sensori aria',
+          type: 'sensor',
           description: 'Umidita alta e temperatura nel range favorevole.',
         },
       ],
