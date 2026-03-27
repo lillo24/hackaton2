@@ -1,0 +1,118 @@
+You are working on the existing React/Vite frontend in `lillo/app-skeleton`.
+
+This task is a small refinement of the current **Roadmap Marketing animation** only.
+
+## Focus
+Improve only these 3 things:
+
+1. make the connection animations a bit **slower**
+2. make the lines **thinner**
+3. make the farmer icons look more clearly like **farmers**, not generic users
+
+Do NOT work on Costi.
+Do NOT inspect or integrate unrelated workspace edits.
+Keep this isolated and parallel-safe.
+
+---
+
+## Requested changes
+
+### 1. Slow down the line animation slightly
+The current Company → Consorzio and Consorzio → Farmers line generation looks good.
+
+Keep the same logic and structure, but make it a bit slower so it feels:
+- more elegant
+- easier to read
+- more presentation-like
+
+Do not make it too slow.
+Just enough to feel more intentional and satisfying.
+
+### 2. Make the lines thinner
+Reduce the visual weight of the connecting lines.
+
+Goal:
+- more refined
+- less heavy
+- cleaner network look
+
+Keep them visible, but lighter and more elegant than now.
+
+### 3. Make farmer icons actually look like farmers
+Right now the farmer nodes should feel more agricultural and less generic.
+
+Improve the farmer visuals so they read more clearly as:
+- farmers
+- agricultural operators
+- people connected to farms
+
+Possible directions:
+- simple farmer-style avatar/icon
+- hat / field-worker silhouette
+- tiny farm-related visual hint
+- icon + small farm badge if needed
+
+Important:
+- keep them clean and stylized
+- do not make them cartoonish
+- do not add too much detail
+- they should still match the polished presentation style
+
+The icons should remain readable at presentation scale.
+
+---
+
+## Design direction
+Keep the current good parts:
+- structured layout
+- branching/radial connection feel
+- clear Consorzio centrality
+
+Just refine the scene.
+
+Prioritize:
+- subtlety
+- elegance
+- readability
+- stronger agricultural identity
+
+Avoid:
+- thick connector strokes
+- exaggerated slow motion
+- noisy icon details
+- generic person icons
+
+---
+
+## Technical constraints
+- Keep Roadmap mode working
+- Keep phone/desktop untouched
+- No backend
+- No unnecessary dependencies
+- Keep implementation clean and isolated
+
+---
+
+## Files likely involved
+You may update:
+- `src/layout/RoadmapPresentation.jsx`
+- `src/layout/RoadmapPresentation.css`
+
+Only touch other files if strictly necessary.
+
+---
+
+## Success criteria
+1. connection animations are slightly slower
+2. connector lines are thinner
+3. farmer nodes look clearly more like farmers
+4. the overall scene remains clean and polished
+5. no unrelated parts are changed
+
+---
+
+## At the end, briefly report
+1. what files you changed
+2. how much you slowed the animation
+3. how you adjusted line thickness
+4. how you changed the farmer icon visuals

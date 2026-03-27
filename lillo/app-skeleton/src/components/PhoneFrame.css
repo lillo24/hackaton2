@@ -1,0 +1,454 @@
+.phone-body {
+  position: relative;
+  width: 375px;
+  height: 812px;
+  border-radius: 50px;
+  background:
+    linear-gradient(160deg, #2c332e 0%, #090c09 52%, #0d100d 100%),
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.18), transparent 38%);
+  box-shadow:
+    0 24px 60px rgba(16, 25, 18, 0.34),
+    0 0 0 2px rgba(234, 239, 231, 0.08) inset,
+    0 0 0 1px rgba(4, 6, 4, 0.76);
+  padding: 12px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  transform-origin: center center;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.phone-body::before {
+  content: '';
+  position: absolute;
+  top: 148px;
+  left: -2px;
+  width: 4px;
+  height: 92px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(180, 188, 181, 0.42), rgba(22, 28, 23, 0.85));
+}
+
+.phone-body::after {
+  content: '';
+  position: absolute;
+  top: 188px;
+  right: -2px;
+  width: 4px;
+  height: 142px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(180, 188, 181, 0.38), rgba(22, 28, 23, 0.82));
+}
+
+.phone-body--vibrating {
+  animation: phone-frame-vibrate 0.72s cubic-bezier(0.37, 0, 0.63, 1);
+}
+
+.phone-bezel {
+  width: 100%;
+  height: 100%;
+  background:
+    linear-gradient(180deg, rgba(15, 17, 15, 0.98), rgba(1, 2, 1, 1)),
+    radial-gradient(circle at top center, rgba(255, 255, 255, 0.08), transparent 24%);
+  border-radius: 40px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 45px 0;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    inset 0 14px 30px rgba(255, 255, 255, 0.02);
+}
+
+.phone-bezel::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  width: 124px;
+  height: 28px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(22, 25, 22, 0.96), rgba(4, 5, 4, 1)),
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.06), transparent 70%);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  z-index: 3;
+}
+
+.phone-screen {
+  flex: 1;
+  border-radius: 28px;
+  background-color: #ffffff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #333;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62);
+}
+
+.phone-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.16), transparent 24%, transparent 68%, rgba(0, 0, 0, 0.08));
+  pointer-events: none;
+  z-index: 4;
+}
+
+.phone-screen--off,
+.phone-screen--vibrating {
+  background: #000000;
+  box-shadow: none;
+}
+
+.phone-screen--off::after,
+.phone-screen--vibrating::after {
+  opacity: 0;
+}
+
+.phone-screen--lockscreen,
+.phone-screen--unlocking {
+  background:
+    linear-gradient(180deg, rgba(20, 34, 25, 0.72), rgba(7, 12, 8, 0.9)),
+    radial-gradient(circle at top left, rgba(132, 181, 105, 0.28), transparent 36%),
+    radial-gradient(circle at bottom right, rgba(221, 174, 95, 0.26), transparent 30%);
+}
+
+.phone-content {
+  flex: 1;
+  overflow: hidden;
+  padding-top: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  transition:
+    opacity 0.28s ease,
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.42s ease;
+}
+
+.phone-content--hidden {
+  opacity: 0;
+  transform: scale(1.02);
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+.phone-content--visible {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+.phone-content--revealing {
+  pointer-events: none;
+}
+
+.phone-startup {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.phone-sleep {
+  position: absolute;
+  inset: 0;
+  background: #000000;
+}
+
+.phone-sleep--trigger {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  appearance: none;
+  cursor: pointer;
+  background: transparent;
+}
+
+.phone-lockscreen {
+  position: absolute;
+  inset: 0;
+  padding: 5.7rem 1.35rem 2rem;
+  background:
+    linear-gradient(180deg, rgba(205, 222, 209, 0.18), rgba(11, 18, 12, 0.48)),
+    radial-gradient(circle at top left, rgba(141, 183, 115, 0.38), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(217, 176, 103, 0.34), transparent 32%),
+    linear-gradient(180deg, #35453a 0%, #162118 100%);
+  backdrop-filter: blur(18px);
+}
+
+.phone-lockscreen::before,
+.phone-lockscreen::after {
+  content: '';
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(0);
+  opacity: 0.32;
+}
+
+.phone-lockscreen::before {
+  top: 120px;
+  left: -18px;
+  width: 190px;
+  height: 190px;
+  background: radial-gradient(circle, rgba(239, 244, 237, 0.54), transparent 68%);
+}
+
+.phone-lockscreen::after {
+  right: -46px;
+  bottom: 140px;
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, rgba(245, 217, 160, 0.44), transparent 68%);
+}
+
+.phone-lockscreen.is-unlocking {
+  animation: phone-lockscreen-dismiss 0.42s cubic-bezier(0.32, 1, 0.68, 1) forwards;
+}
+
+.phone-lockscreen__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1.1rem;
+  min-height: 100%;
+}
+
+.phone-lockscreen__clock-block {
+  text-align: center;
+  color: #f6faf4;
+  text-shadow: 0 10px 30px rgba(13, 20, 14, 0.28);
+}
+
+.phone-lockscreen__date {
+  margin: 0 0 0.35rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(246, 250, 244, 0.8);
+}
+
+.phone-lockscreen__time {
+  margin: 0;
+  font-size: 4.2rem;
+  font-weight: 700;
+  line-height: 0.94;
+  letter-spacing: -0.05em;
+}
+
+.phone-lockscreen__subcopy {
+  margin: 0.45rem 0 0;
+  font-size: 0.86rem;
+  color: rgba(244, 248, 241, 0.82);
+}
+
+.phone-lockscreen__notification {
+  margin-top: 1rem;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(249, 249, 251, 0.92), rgba(241, 242, 246, 0.84)),
+    linear-gradient(120deg, rgba(255, 255, 255, 0.34), transparent 52%);
+  color: #16181d;
+  padding: 0.78rem 0.9rem 0.84rem;
+  text-align: left;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  backdrop-filter: blur(18px) saturate(1.04);
+  box-shadow:
+    0 18px 34px rgba(15, 18, 24, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  transform: translateY(0) scale(1);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+  animation: phone-notification-enter 0.42s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+}
+
+.phone-lockscreen__notification::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: linear-gradient(180deg, rgba(231, 117, 91, 0.96), rgba(181, 53, 40, 0.84));
+}
+
+.phone-lockscreen__notification::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.24), transparent 24%, transparent 74%, rgba(255, 255, 255, 0.08));
+  pointer-events: none;
+}
+
+.phone-lockscreen__notification:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow:
+    0 22px 40px rgba(15, 18, 24, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.phone-lockscreen__notification:disabled {
+  cursor: default;
+}
+
+.phone-lockscreen__notification--critical {
+  border-color: rgba(155, 49, 40, 0.22);
+}
+
+.phone-lockscreen__notification--high {
+  border-color: rgba(180, 104, 33, 0.22);
+}
+
+.phone-lockscreen__notification--medium {
+  border-color: rgba(73, 108, 156, 0.22);
+}
+
+.phone-lockscreen__notification--low {
+  border-color: rgba(77, 123, 91, 0.22);
+}
+
+.phone-lockscreen__notification-pill {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  border-radius: 999px;
+  margin-bottom: 0.48rem;
+  padding: 0.24rem 0.5rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.phone-lockscreen__notification-pill--critical {
+  background: rgba(155, 49, 40, 0.12);
+  color: #912d24;
+}
+
+.phone-lockscreen__notification-pill--high {
+  background: rgba(180, 104, 33, 0.12);
+  color: #965820;
+}
+
+.phone-lockscreen__notification-pill--medium {
+  background: rgba(73, 108, 156, 0.12);
+  color: #44658f;
+}
+
+.phone-lockscreen__notification-pill--low {
+  background: rgba(77, 123, 91, 0.12);
+  color: #456e52;
+}
+
+.phone-lockscreen__notification-title {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  width: 100%;
+  max-width: none;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.22;
+  color: #171a20;
+  letter-spacing: -0.01em;
+}
+
+.phone-lockscreen__hint {
+  margin: auto auto 0;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: rgba(244, 248, 241, 0.82);
+}
+
+@keyframes phone-frame-vibrate {
+  0% {
+    transform: translateX(0) rotate(0deg);
+  }
+
+  14% {
+    transform: translateX(-5px) rotate(-0.72deg);
+  }
+
+  28% {
+    transform: translateX(5px) rotate(0.72deg);
+  }
+
+  42% {
+    transform: translateX(-4px) rotate(-0.52deg);
+  }
+
+  56% {
+    transform: translateX(4px) rotate(0.46deg);
+  }
+
+  72% {
+    transform: translateX(-1.6px) rotate(-0.2deg);
+  }
+
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+@keyframes phone-notification-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes phone-lockscreen-dismiss {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateY(-108%);
+    opacity: 0.72;
+  }
+}
+
+@media (max-width: 460px) {
+  .phone-body {
+    width: calc(100vw - 2.5rem);
+    height: calc((100vw - 2.5rem) * 812 / 375);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phone-body,
+  .phone-content,
+  .phone-lockscreen__notification {
+    transition-duration: 0.01ms;
+  }
+
+  .phone-body--vibrating,
+  .phone-lockscreen.is-unlocking,
+  .phone-lockscreen__notification {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+  }
+}

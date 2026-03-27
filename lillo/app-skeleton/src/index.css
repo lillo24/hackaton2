@@ -1,0 +1,98 @@
+:root {
+  color-scheme: light;
+  font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+  --ink: #162219;
+  --muted: #5e6f63;
+  --muted-strong: #435146;
+  --panel: rgba(249, 251, 247, 0.74);
+  --panel-strong: #ffffff;
+  --stroke: rgba(32, 52, 38, 0.12);
+  --shadow-soft: 0 18px 40px rgba(26, 48, 33, 0.12);
+  --shadow-strong: 0 36px 90px rgba(20, 30, 21, 0.28);
+  --critical: #d95043;
+  --high: #eb7a2b;
+  --medium: #caa02a;
+  --low: #3d8f6d;
+  --live: #2f996a;
+  --syncing: #bd8d1f;
+  --degraded: #bf5a4f;
+  --accent: #5f8a4b;
+  --accent-strong: #3f6e4e;
+  --profile-brand: #355e47;
+  --profile-muted: #5b6f61;
+  --profile-muted-strong: #415245;
+  --profile-card-radius: 26px;
+  --profile-border: rgba(54, 88, 66, 0.18);
+  --profile-shadow-soft: 0 15px 34px rgba(36, 56, 44, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+html.admin-route {
+  height: auto;
+  min-height: 100%;
+  overflow-y: auto;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(172, 211, 150, 0.35), transparent 36%),
+    radial-gradient(circle at right 18%, rgba(221, 186, 126, 0.22), transparent 28%),
+    linear-gradient(145deg, #edf4eb 0%, #f7f1e8 52%, #ebf3ef 100%);
+}
+
+body.admin-route {
+  height: auto;
+  min-height: 100%;
+  overflow-y: auto;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(20, 32, 24, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 32, 24, 0.04) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.85), transparent 88%);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#root {
+  height: 100%;
+  overflow: hidden;
+}
+
+#root.admin-route {
+  height: auto;
+  min-height: 100%;
+  overflow: visible;
+}
+
+::selection {
+  background: rgba(95, 138, 75, 0.25);
+}

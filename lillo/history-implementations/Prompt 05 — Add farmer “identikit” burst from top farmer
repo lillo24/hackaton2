@@ -1,0 +1,188 @@
+You are working on the existing React/Vite frontend in `lillo/app-skeleton`.
+
+This task is only about refining the **Marketing animation scene** inside **Roadmap** mode.
+
+## Important
+- Focus only on the farmer-profile / identikit visual sequence
+- Do NOT work on Costi
+- Do NOT inspect or integrate unrelated workspace edits
+- Keep this isolated and parallel-safe
+
+---
+
+## Goal
+After all farmers are connected to the **Consorzio**, I want to show that each farmer has a specific **identikit/profile**.
+
+The visual idea is:
+- once the farmer network is complete,
+- the **first farmer at the top** becomes the focus,
+- and from that farmer, some icons/text come out around it with a “pop out / throw up” animation,
+- to communicate that we analyze the farmer profile,
+- detect his crop type and connected sensors,
+- and then generate **targeted alerts**.
+
+This should feel very visual and intuitive.
+
+---
+
+## Sequence to add
+
+### Existing sequence stays
+Keep the current sequence:
+1. Company appears
+2. Consorzio appears
+3. Company → Consorzio line draws
+4. Farmers appear in a circle / arc
+5. Consorzio → Farmers branching connections animate
+
+### New sequence after that
+After the full network is visible:
+
+#### Step 6 — Focus on the top farmer
+- Select the **top farmer** (the first farmer at the top of the arc/circle)
+- subtly emphasize it:
+  - slight scale-up
+  - glow
+  - or other elegant focus treatment
+- the rest of the network can remain visible but slightly quieter
+
+#### Step 7 — Identikit burst
+From that farmer, some profile elements should come out around it with a dynamic “burst upward/outward” animation.
+
+I want this to feel like:
+- the information emerges from the farmer
+- slightly playful / satisfying
+- but still polished and presentation-friendly
+
+The motion should feel like:
+- a quick upward pop / throw-up reveal
+- then soft settle into position
+- not chaotic
+- not too cartoonish
+
+---
+
+## Required profile elements
+At minimum, show these two elements around the selected farmer:
+
+### 1. Sensor icon
+- use the existing sensor visual from the profile/config page if reusable
+- if not directly reusable, create a stylistically coherent sensor icon
+- this should represent the farmer’s available sensor/data setup
+
+### 2. Crop type icon
+- show a grain / crop icon
+- this represents the crop type / agricultural profile
+
+These should appear as small floating profile tokens around the farmer.
+
+Preferred layout:
+- one to upper-left
+- one to upper-right
+- or one top / one side
+- balanced and readable
+
+---
+
+## Meaning to communicate
+This animation should visually explain:
+
+- each farmer has a different profile
+- we understand his setup
+- we know what sensors/data he has
+- we know his crop type
+- therefore we can generate **targeted alerts**
+
+The scene should communicate personalization, not just distribution.
+
+---
+
+## Optional small text
+Keep text minimal.
+
+If useful, add only a tiny supporting label near the burst, such as one of these:
+- `Profilo aziendale`
+- `Sensori + coltura`
+- `Alert mirati`
+- `Identikit agricolo`
+
+Do NOT add paragraphs.
+This should remain mainly visual.
+
+---
+
+## Animation style
+The “burst” should feel:
+- upward / outward
+- quick but readable
+- smooth
+- elegant
+- slightly playful
+
+Possible motion style:
+- element starts near the farmer
+- shoots upward/outward with small overshoot
+- settles gently
+- optional tiny fade/scale-in
+- optional stagger between the two icons
+
+After reveal:
+- elements can float slightly
+- farmer remains highlighted
+- the rest of the network remains visible as context
+
+Avoid:
+- messy explosion effect
+- too many particles
+- random direction chaos
+- childish cartoon motion
+
+---
+
+## Visual hierarchy
+Important:
+- first read = the farmer is selected
+- second read = profile elements emerge
+- third read = this explains targeted personalization
+
+This should feel like:
+**distribution first, then farmer-specific intelligence**
+
+---
+
+## Technical constraints
+- Keep Roadmap mode working
+- Keep phone/desktop untouched
+- No backend
+- No unnecessary dependencies
+- Prefer simple React state + CSS transitions/keyframes
+- Reuse existing icons/components if easy and clean
+
+---
+
+## Files likely involved
+You may update:
+- `src/layout/RoadmapPresentation.jsx`
+- `src/layout/RoadmapPresentation.css`
+
+If a reusable icon from the profile/config page is easy to import cleanly, you may reuse it.
+Do not spread changes widely unless truly necessary.
+
+---
+
+## Success criteria
+1. After all farmers connect, the top farmer becomes the focus
+2. Profile elements emerge from that farmer with a burst/pop-up animation
+3. At least a sensor icon and a crop/grain icon are shown
+4. The scene clearly communicates farmer identikit / personalization
+5. Text stays minimal
+6. Costi is untouched
+7. Existing roadmap scene still works
+
+---
+
+## At the end, briefly report
+1. what files you changed
+2. how the top farmer is selected/focused
+3. how the identikit burst animation works
+4. whether you reused an existing sensor icon or created a matching one
