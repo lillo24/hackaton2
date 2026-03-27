@@ -239,7 +239,7 @@ export const integrations = [
 export const alertTemplates = [
   {
     id: 'humidity-spike',
-    severity: 'critical',
+    severity: 'high',
     status: 'new',
     occurredMinutesAgo: 4,
     farmRelevance: {
@@ -254,22 +254,24 @@ export const alertTemplates = [
       greenhouse: 'greenhouse-seedling-corridor',
     },
     titles: {
-      vineyard: 'Peronospora risk',
+      vineyard: 'Rischio Peronospora',
       orchard: 'Leaf wetness spike',
       greenhouse: 'Condensation event',
     },
     summaries: {
-      vineyard: 'Warm, wet canopy conditions and recent rainfall point to a strong infection window for downy mildew.',
+      vineyard: 'Pioggia recente, bagnatura fogliare persistente e umidita elevata indicano una finestra favorevole alla Peronospora.',
       orchard: 'Persistent leaf wetness is reducing the drying window across the central orchard rows.',
       greenhouse: 'Humidity is pooling above the condensation threshold near the eastern vents.',
     },
     reasons: {
-      vineyard: 'Prolonged canopy wetness, rainfall, and stable temperatures in the infection range all align with a likely peronospora event in this parcel.',
+      vineyard:
+        'I segnali rilevati indicano una probabile finestra di infezione: dopo la pioggia la chioma e rimasta bagnata, con umidita elevata e temperatura in fascia favorevole alla Peronospora.',
       orchard: 'Canopy humidity and overnight temperature spread are overlapping in a pattern that precedes disease pressure.',
       greenhouse: 'Ventilation response is lagging behind a rapid humidity rise, creating a stable condensation pocket.',
     },
     actions: {
-      vineyard: 'Inspect the most humid rows now. Prioritize intervention in the lower, less ventilated block and verify canopy drying conditions during the next hours.',
+      vineyard:
+        'Controlla le file piu umide e meno ventilate, cerca i primi sintomi sulle foglie e valuta un intervento rapido in base al protocollo agronomico.',
       orchard: 'Increase row airflow checks and stage a targeted disease-prevention pass for the wettest block.',
       greenhouse: 'Raise ventilation and dehumidification settings in bay 3 before condensation settles on the crop.',
     },

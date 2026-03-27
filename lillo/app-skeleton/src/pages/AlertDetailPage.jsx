@@ -12,50 +12,49 @@ const DIAGNOSIS_FLOW_PRESETS = [
       return alert?.id === 'humidity-spike' && /peronospora/i.test(alert?.title ?? '');
     },
     profile: {
-      kicker: 'Possible Peronospora onset identified from integrated field data',
-      title: 'Peronospora risk',
-      severityTone: 'high',
-      severityLabel: 'High',
-      summary: 'Field conditions match a Peronospora infection window.',
+      title: 'Rischio Peronospora',
+      severityLabel: 'Alto',
+      summary:
+        'Pioggia recente, bagnatura fogliare persistente e umidita elevata indicano una finestra favorevole alla Peronospora.',
       plantLabel: 'Peronospora',
-      evidenceTitle: 'Why this alert was triggered',
+      problemTitle: 'Problema identificato',
+      problemSummary: 'I dati rilevati indicano una probabile finestra di infezione da Peronospora.',
       evidenceItems: [
-        'Rain event detected',
-        'Leaf wetness remained elevated',
-        'Humidity stayed high',
-        'Temperature stayed in the infection-favorable range',
+        'Pioggia recente',
+        'Bagnatura fogliare prolungata',
+        'Umidita elevata',
+        'Temperature favorevoli',
       ],
-      detectedPatternTitle: 'Detected pattern',
-      detectedPatternText:
-        'After rainfall, the canopy stayed wet for several hours while humidity remained high and temperature stayed in a favorable range for Peronospora development. These signals, taken together, indicate a strong probability of infection risk in this block.',
-      dataUsedTitle: 'Data used',
-      dataItems: [
+      signalsTitle: 'Segnali rilevati',
+      signalItems: [
         {
-          label: 'Weather',
-          description: 'recent rain and forecast humidity',
+          label: 'Meteo',
+          description: 'Pioggia recente e condizioni di scarsa asciugatura.',
         },
         {
-          label: 'Air sensor',
-          description: 'temperature and relative humidity',
+          label: 'Sensori chioma',
+          description: 'Bagnatura fogliare persistente dopo l evento di pioggia.',
         },
         {
-          label: 'Leaf wetness / canopy condition',
-          description: 'prolonged wet surface',
-        },
-        {
-          label: 'Field context',
-          description: 'crop type and block-specific susceptibility',
+          label: 'Sensori aria',
+          description: 'Umidita alta e temperatura nel range favorevole.',
         },
       ],
-      actionTitle: 'Recommended action',
+      reasoningTitle: 'Perche pensiamo sia Peronospora',
+      reasoningText:
+        'Dopo l evento di pioggia, la chioma e rimasta bagnata per molte ore. L umidita e rimasta elevata e la temperatura si e mantenuta in una fascia favorevole allo sviluppo della Peronospora. La combinazione di questi segnali rende probabile una finestra di infezione in questo appezzamento.',
+      interpretationText:
+        'Abbiamo combinato meteo e sensori di campo per individuare condizioni compatibili con l avvio di un infezione. Il rischio e alto, quindi questo appezzamento va controllato subito.',
+      actionTitle: 'Cosa fare ora',
       actionItems: [
-        'Inspect the most exposed leaves for early symptoms',
-        'Prioritize this vineyard block in the next field check',
-        'Evaluate treatment timing based on agronomic protocol',
-        'Monitor the next 24-48 hours for continued favorable conditions',
+        'Controlla le foglie nelle zone piu umide.',
+        'Dai priorita alle file meno ventilate.',
+        'Verifica l evoluzione nelle prossime ore.',
+        'Valuta l intervento secondo protocollo agronomico.',
       ],
-      noteTitle: 'Why acting now matters',
-      noteText: 'Early intervention can reduce spread risk and avoid a more severe infection stage.',
+      impactTitle: 'Perche intervenire ora conta',
+      impactText:
+        'Intervenire presto aiuta a ridurre il rischio di diffusione e a non perdere la finestra utile di trattamento.',
     },
   },
 ];
@@ -90,7 +89,7 @@ function AlertDetailPage({ alert }) {
     topBadges.push(
       <p className="alert-detail-notification" key="new-notification">
         <span aria-hidden="true" className="alert-detail-notification__dot" />
-        <span>New notification</span>
+        <span>Nuova notifica</span>
       </p>,
     );
   }
