@@ -241,7 +241,7 @@ export const alertTemplates = [
     id: 'humidity-spike',
     severity: 'critical',
     status: 'new',
-    occurredMinutesAgo: 6,
+    occurredMinutesAgo: 4,
     farmRelevance: {
       vineyard: 'primary',
       orchard: 'primary',
@@ -249,49 +249,49 @@ export const alertTemplates = [
     },
     sourceIds: ['canopy-sensor-network', 'weather-model'],
     fieldByFarm: {
-      vineyard: 'vineyard-north-canopy',
+      vineyard: 'vineyard-lower-terrace',
       orchard: 'orchard-central-rows',
       greenhouse: 'greenhouse-seedling-corridor',
     },
     titles: {
-      vineyard: 'Mildew pressure rising across the north canopy',
-      orchard: 'Leaf wetness spike detected in the stone-fruit rows',
-      greenhouse: 'Condensation event building in greenhouse bay 3',
+      vineyard: 'Peronospora risk',
+      orchard: 'Leaf wetness spike',
+      greenhouse: 'Condensation event',
     },
     summaries: {
-      vineyard: 'Humidity climbed above the safe mildew threshold while airflow stayed weak in the north block.',
+      vineyard: 'Warm, wet canopy conditions and recent rainfall point to a strong infection window for downy mildew.',
       orchard: 'Persistent leaf wetness is reducing the drying window across the central orchard rows.',
       greenhouse: 'Humidity is pooling above the condensation threshold near the eastern vents.',
     },
     reasons: {
-      vineyard: 'Leaf wetness remained elevated for two sensor cycles while wind stayed too light to clear the canopy.',
+      vineyard: 'Prolonged canopy wetness, rainfall, and stable temperatures in the infection range all align with a likely peronospora event in this parcel.',
       orchard: 'Canopy humidity and overnight temperature spread are overlapping in a pattern that precedes disease pressure.',
       greenhouse: 'Ventilation response is lagging behind a rapid humidity rise, creating a stable condensation pocket.',
     },
     actions: {
-      vineyard: 'Advance spray-window review and open airflow lanes before the next humidity peak.',
+      vineyard: 'Inspect the most humid rows now. Prioritize intervention in the lower, less ventilated block and verify canopy drying conditions during the next hours.',
       orchard: 'Increase row airflow checks and stage a targeted disease-prevention pass for the wettest block.',
       greenhouse: 'Raise ventilation and dehumidification settings in bay 3 before condensation settles on the crop.',
     },
     relevanceReasons: {
-      vineyard: 'Primary because mildew pressure can escalate within one spray cycle in dense canopy zones.',
+      vineyard: 'Primary because peronospora pressure can escalate quickly when wet canopy conditions persist in less ventilated vineyard blocks.',
       orchard: 'Primary because sustained leaf wetness during bloom can quickly reduce fruit quality and raise disease risk.',
       greenhouse: 'Primary because condensation in closed environments can spread quickly without immediate HVAC correction.',
     },
     sourceContributions: {
       'canopy-sensor-network': {
-        signal: 'Leaf wetness and in-row humidity stayed above safe thresholds across two consecutive sampling cycles.',
-        interpretation: 'On-field conditions are already inside the window where fungal pressure accelerates.',
+        signal: 'Leaf wetness remained elevated through the night, with high humidity and mild temperatures holding the canopy in a favourable infection range.',
+        interpretation: 'The canopy is already inside a moisture and temperature window that supports peronospora pressure.',
       },
       'weather-model': {
-        signal: 'Forecast wind stayed weak while overnight humidity remained elevated.',
-        interpretation: 'Natural drying is unlikely to recover in time, so the risk remains active.',
+        signal: 'Recent rain, continued overnight moisture, and limited drying conditions suggest a persistent disease-pressure window across this block.',
+        interpretation: 'Forecast conditions do not provide enough drying recovery, so infection pressure is likely to remain active.',
       },
     },
     timeline: [
-      { minutesAgo: 31, label: 'Humidity crossed threshold', note: 'Canopy sensor cluster A reported an 88% humidity floor.' },
-      { minutesAgo: 22, label: 'Secondary sensor confirmed', note: 'Nearby canopy node repeated the same rise pattern.' },
-      { minutesAgo: 14, label: 'Alert promoted', note: 'Drying window collapsed below the configured minimum.' },
+      { minutesAgo: 34, label: 'Rainfall event recorded', note: 'Recent precipitation reset canopy moisture across the lower terrace.' },
+      { minutesAgo: 26, label: 'Leaf wetness persisted', note: 'Canopy sensors continued to report elevated wetness through the night.' },
+      { minutesAgo: 18, label: 'Alert promoted', note: 'Drying conditions stayed too weak to break the infection window.' },
     ],
   },
   {
@@ -305,37 +305,55 @@ export const alertTemplates = [
       greenhouse: 'supporting',
     },
     sourceIds: ['irrigation-controller', 'soil-probe-grid', 'work-order-history'],
+    sourceIdsByFarm: {
+      vineyard: ['canopy-sensor-network', 'weather-model'],
+    },
     fieldByFarm: {
       vineyard: 'vineyard-lower-terrace',
       'open-field': 'openfield-west-zones',
       greenhouse: 'greenhouse-bay-2',
     },
     titles: {
-      vineyard: 'Block C irrigation drift is widening between rows',
-      'open-field': 'Western field zones are losing moisture uniformity',
-      greenhouse: 'Nutrient feed timing slipped out of target in bay 2',
+      vineyard: 'Sunburn risk',
+      'open-field': 'Irrigation drift',
+      greenhouse: 'Nutrient feed timing drift',
     },
     summaries: {
-      vineyard: 'The lower terrace is drying faster than the upper rows, increasing uneven vine stress.',
+      vineyard: 'Sensors and forecast both point to strong afternoon heat on the most exposed bunches.',
       'open-field': 'Moisture variance between west-side zones now exceeds the preferred irrigation spread.',
       greenhouse: 'The indoor nutrient cycle is lagging, which risks uneven uptake across the bay.',
     },
     reasons: {
-      vineyard: 'Soil probes in the lower terrace show a sharper post-cycle drop than the upper terrace.',
+      vineyard: 'Canopy heat, dry soil, and the incoming hot window are stacking into a sunburn pattern.',
       'open-field': 'Two irrigation zones failed to recover to the same moisture band after the previous watering window.',
       greenhouse: 'Controller logs show the nutrient mixer delayed the final dose segment by one cycle.',
     },
+    integratedSummaries: {
+      vineyard:
+        'Current canopy heat, low soil moisture, and the incoming peak-temperature window indicate a strong probability of heat damage on exposed bunches.',
+    },
+    riskScores: {
+      vineyard: 78,
+    },
     actions: {
-      vineyard: 'Rebalance valve timing for the lower terrace and recheck soil response after the next pulse.',
+      vineyard: 'Irrigate the driest rows now, if possible. Avoid leaf removal. Check exposed bunches this evening.',
       'open-field': 'Inspect the western valves and stage a corrective moisture pass if drift continues.',
       greenhouse: 'Reset bay 2 feed schedule and confirm the next nutrient mix before the afternoon cycle.',
     },
     relevanceReasons: {
-      vineyard: 'Primary because terrace imbalance can stress vines and compromise ripening consistency.',
+      vineyard: 'Primary because exposed bunches can lose quality quickly once heat and water stress overlap.',
       'open-field': 'Primary because wide-zone moisture drift can spread quickly and reduce uniform field performance.',
       greenhouse: 'Supporting because feed timing drift can create uneven uptake even when climate remains stable.',
     },
     sourceContributions: {
+      'canopy-sensor-network': {
+        signal: 'Canopy air temperature is 34.8 °C while soil is hot and soil moisture is low.',
+        interpretation: 'The block is already under active heat and water stress before the hottest hours arrive.',
+      },
+      'weather-model': {
+        signal: 'Forecast peaks at 37.9 °C this afternoon with no rain, and recent history shows repeated hot dry days in this block.',
+        interpretation: 'The next hours are likely to intensify exposure instead of letting the canopy recover.',
+      },
       'irrigation-controller': {
         signal: 'Valve and dosing logs show the cycle completed outside the expected timing envelope.',
         interpretation: 'Control behavior indicates the irrigation plan is drifting from configured targets.',
@@ -372,9 +390,9 @@ export const alertTemplates = [
       'open-field': 'openfield-central-band',
     },
     titles: {
-      vineyard: 'Canopy temperature spread suggests early stress on exposed vines',
-      orchard: 'Fruit-zone heat load is climbing on the south-facing rows',
-      'open-field': 'Vegetation index is softening in the central field band',
+      vineyard: 'Canopy stress',
+      orchard: 'Fruit-zone heat load',
+      'open-field': 'Vegetation stress',
     },
     summaries: {
       vineyard: 'The exposed rows are warming faster than the shaded side, hinting at uneven vine load.',
@@ -422,38 +440,48 @@ export const alertTemplates = [
       orchard: 'primary',
     },
     sourceIds: ['weather-model', 'canopy-sensor-network'],
+    sourceIdsByFarm: {
+      vineyard: ['canopy-sensor-network', 'weather-model'],
+    },
     fieldByFarm: {
       vineyard: 'vineyard-lower-terrace',
       orchard: 'orchard-blossom-lane',
     },
     titles: {
-      vineyard: 'Cold-air pocket may settle in the lower vineyard terrace',
-      orchard: 'Frost pocket risk is increasing around the blossom-sensitive rows',
+      vineyard: 'Freeze risk',
+      orchard: 'Frost pocket risk',
     },
     summaries: {
-      vineyard: 'Forecast and slope readings agree on a cold-air accumulation risk in the lower terrace.',
+      vineyard: 'Sensors and forecast both point to a frost event before sunrise in the coldest rows.',
       orchard: 'Blossom-sensitive rows are entering a temperature band that requires frost protection prep.',
     },
     reasons: {
-      vineyard: 'Calm wind, falling temperature, and slope geometry are aligning with terrace frost-pocket behavior.',
+      vineyard: 'Field cooling, weak wind, and terrace history are aligning into a freeze event.',
       orchard: 'The orchard block is tracking below the blossom safety margin while airflow is expected to stay weak.',
     },
+    integratedSummaries: {
+      vineyard:
+        'Sensor cooling, sub-zero forecast, and repeated cold-air accumulation in this block all point to a likely frost event before sunrise.',
+    },
+    riskScores: {
+      vineyard: 94,
+    },
     actions: {
-      vineyard: 'Prepare frost mitigation for the lower terrace and confirm crew readiness before sunrise.',
+      vineyard: 'Start frost protection now. Protect the coldest rows first. Recheck the block before sunrise.',
       orchard: 'Stage blossom protection actions and verify the coldest rows first during the next patrol.',
     },
     relevanceReasons: {
-      vineyard: 'Primary because terrace frost exposure can impact vine health and early-season yield potential.',
+      vineyard: 'Primary because terrace frost exposure can damage shoots and cut early-season yield very quickly.',
       orchard: 'Primary because blossom-stage temperature drops can cause immediate crop loss if untreated.',
     },
     sourceContributions: {
-      'weather-model': {
-        signal: 'Forecast updates show overnight lows and wind calmness inside frost-pocket conditions.',
-        interpretation: 'Atmospheric conditions support cold-air pooling and a high likelihood of localized frost.',
-      },
       'canopy-sensor-network': {
-        signal: 'Lower-block canopy probes are cooling faster than surrounding zones.',
-        interpretation: 'On-field telemetry confirms the model risk is materializing in the vulnerable rows.',
+        signal: 'Air temperature fell to 0.4 °C while humidity stayed high across the last two sampling cycles.',
+        interpretation: 'The lower terrace is already entering the temperature band where frost can settle.',
+      },
+      'weather-model': {
+        signal: 'Forecast minimum reaches -1.8 °C before sunrise while wind stays weak, and parcel history shows this terrace cools earlier than nearby rows.',
+        interpretation: 'The next hours favor cold-air pooling and make a localized freeze event highly likely.',
       },
     },
     timeline: [
