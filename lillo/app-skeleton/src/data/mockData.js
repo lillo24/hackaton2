@@ -76,7 +76,7 @@ export const fields = [
   {
     id: 'vineyard-lower-terrace',
     farmTypeId: 'vineyard',
-    name: 'Lower Terrace',
+    name: 'Terrazza inferiore',
     plotCode: 'VN-L3',
     description: 'Cool air settles here first, making this block the frost watchpoint.',
   },
