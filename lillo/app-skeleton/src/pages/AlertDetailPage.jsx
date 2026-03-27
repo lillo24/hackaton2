@@ -15,14 +15,14 @@ const DIAGNOSIS_FLOW_PRESETS = [
       title: 'Rischio Peronospora',
       severityLabel: 'Alto',
       summary:
-        'Pioggia recente, bagnatura fogliare persistente e umidità elevata indicano una finestra favorevole alla Peronospora.',
+        'Pioggia recente, bagnatura fogliare persistente e umidita elevata indicano una finestra favorevole alla Peronospora.',
       plantLabel: 'Peronospora',
       problemTitle: 'Problema identificato',
       problemSummary: 'I dati rilevati indicano una probabile finestra di infezione da Peronospora.',
       evidenceItems: [
         'Pioggia recente',
         'Bagnatura fogliare prolungata',
-        'Umidità elevata',
+        'Umidita elevata',
         'Temperature favorevoli',
       ],
       signalsTitle: 'Segnali rilevati',
@@ -30,7 +30,7 @@ const DIAGNOSIS_FLOW_PRESETS = [
         {
           label: 'Meteo',
           type: 'weather',
-          description: "Pioggia recente e condizioni di scarsa asciugatura.",
+          description: 'Pioggia recente e condizioni di scarsa asciugatura.',
         },
         {
           label: 'Sensori chioma',
@@ -40,35 +40,35 @@ const DIAGNOSIS_FLOW_PRESETS = [
         {
           label: 'Sensori aria',
           type: 'sensor',
-          description: 'Umidità alta e temperatura nel range favorevole.',
+          description: 'Umidita alta e temperatura nel range favorevole.',
         },
       ],
-      reasoningTitle: 'Perché pensiamo sia Peronospora',
+      reasoningTitle: 'Perche pensiamo sia Peronospora',
       reasoningText:
-        'Dopo la pioggia, la chioma è rimasta bagnata a lungo. L’umidità si è mantenuta elevata e la temperatura è rimasta in un intervallo favorevole allo sviluppo della Peronospora. La combinazione di questi segnali indica una probabile finestra di infezione in questo appezzamento.',
+        'Dopo la pioggia, la chioma e rimasta bagnata a lungo. L umidita si e mantenuta elevata e la temperatura e rimasta in un intervallo favorevole allo sviluppo della Peronospora. La combinazione di questi segnali indica una probabile finestra di infezione in questo appezzamento.',
       interpretationText:
-        "Abbiamo combinato meteo e sensori di campo per individuare condizioni compatibili con l'avvio di un'infezione. Il rischio è alto, quindi questo appezzamento va controllato subito.",
+        "Abbiamo combinato meteo e sensori di campo per individuare condizioni compatibili con l'avvio di un'infezione. Il rischio e alto, quindi questo appezzamento va controllato subito.",
       actionTitle: 'Cosa fare adesso',
       actionSteps: [
         {
-          title: 'Controlla le foglie più umide',
-          text: 'Cerca i primi segnali nelle zone dove l’asciugatura è più lenta.',
+          title: 'Entra nella prima finestra utile',
+          text: 'Valuta un antiperonosporico con attivita endoterapica o post-infezione consentito da disciplinare, etichetta e bollettino locale.',
         },
         {
-          title: 'Dai priorità alle file meno ventilate',
-          text: 'Concentrati prima sulle aree dove l’umidità tende a ristagnare.',
+          title: 'Riduci subito la bagnatura della chioma',
+          text: 'Dai priorita a spollonatura, germogli bassi e zone meno ventilate per favorire asciugatura e circolazione d aria.',
         },
         {
-          title: 'Segui l’evoluzione nelle prossime ore',
-          text: 'Verifica se le condizioni favorevoli restano attive.',
+          title: 'Non trattare con foglie gocciolanti',
+          text: 'Aspetta la fine della pioggia e l avvio dell asciugatura; se e prevista nuova pioggia a breve, scegli solo soluzioni compatibili con tempi di assorbimento ed etichetta.',
         },
         {
-          title: 'Valuta l’intervento',
-          text: 'Procedi secondo il protocollo agronomico adottato.',
+          title: 'Ricontrolla entro 24-48 ore',
+          text: 'Verifica nuova bagnatura fogliare, evoluzione del rischio e comparsa di sintomi per decidere il passo successivo.',
         },
       ],
       actionClosingNote:
-        'Agire presto aiuta a contenere il rischio di diffusione e a intervenire nella finestra più utile.',
+        'Agire presto, con il prodotto e il timing corretti, aiuta a contenere la diffusione e a non perdere la finestra di intervento piu efficace.',
     },
   },
 ];
