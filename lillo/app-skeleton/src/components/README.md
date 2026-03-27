@@ -14,6 +14,7 @@ Files
 - `StatusBadge.jsx` - tone-aware pill for severities, statuses, and metadata tags.
 - `AlertListItem.jsx` - reusable prioritized alert card with compact severity/time metadata, larger right-side signal/problem icons, and card-level open behavior that preserves list return context and focus id.
 - `AlertDetailBlock.jsx` (`DRAFT`) - shared alert-detail body for the farmer `/alert` route that owns the severity-tinted hero, collapsible `Integrated` section, and roadmap body while keeping compatibility fallbacks for the current alert shape (`integratedSummary ?? whyTriggered`, optional risk line, and field plot-code rendering).
+- `AlertDiagnosisFlow.jsx` (`DRAFT`) - diagnosis-flow detail renderer used for disease-risk style alerts; it owns the compact two-column hero (plant visual + trigger evidence), detected-pattern narrative, data-used matrix, action checklist, and final urgency note from a profile object so new presets (for example Freeze Risk) can be added without changing layout structure.
 - `FarmProfileStage.jsx` (`DRAFT`) - shared farm-profile stage that can render the handwritten-style `Giorgio's farm` header plus the static parcel scene, profile integration badges, an optional dashboard-only floating alert summary for the dashboard's top block, and optional tile-alert click wiring passed down from the dashboard route.
 - `WaterLevelCard.jsx` (`DRAFT`) - reusable calm trend card with a smooth SVG line and day-axis labels for dashboard summary context.
 - `SoilMoistureCard.jsx` (`DRAFT`) - reusable three-pillar moisture card with full-capacity wells and filled level bars for compact dashboard overview.
@@ -33,6 +34,7 @@ Non-obvious behavior
 - `PhoneFrame` only reports intro completion after the state machine reaches its final `app` state, which keeps replay/skip handling deterministic in the preview shell.
 - `FarmProfileStage` centralizes the optional profile header, alert-derived field markers, integration-derived source badges, and the optional dashboard-only alert summary so the dashboard keeps one farm-scene owner even after the dedicated Profile route was removed.
 - `AlertDetailBlock` resets the `Integrated` accordion whenever the selected alert changes, derives the main integrated copy from `integratedSummary ?? whyTriggered`, and still renders the existing `relevanceReason` as follow-up detail so the `lillo` alert page keeps its current explanation depth while adopting the shared structure.
+- `AlertDiagnosisFlow` stays intentionally risk-oriented in wording (`Possible ... onset`, `... risk`, infection window language) and avoids confirmed-diagnosis phrasing while still surfacing actionable field steps.
 - `SectionCard` accepts an optional `className` so pages can keep shared card semantics while overriding container tone for special layouts.
 - `WaterLevelCard` rescales chart Y positions from provided values so the curve remains readable without introducing dashboard-like chart complexity.
 - `SoilMoistureCard` expects percentage-like values and clamps to `0-100` before rendering bar fills.
