@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import FarmProfileStage from '../components/FarmProfileStage';
 import SectionCard from '../components/SectionCard';
 import SoilMoistureCard from '../components/SoilMoistureCard';
@@ -122,7 +122,10 @@ function buildDashboardTileTerrainTreatments() {
 }
 
 function DashboardPage({ selectedFarm, alerts = [], integrations = [], onSelectAlert }) {
+  const location = useLocation();
   const navigate = useNavigate();
+  const previewMode = useMemo(() => new URLSearchParams(location.search).get('mode'), [location.search]);
+  const modeSearch = previewMode ? `?mode=${previewMode}` : '';
   const [chatInput, setChatInput] = useState('');
   const [chatMessages, setChatMessages] = useState([]);
   const [typingMessageId, setTypingMessageId] = useState(null);
@@ -274,9 +277,12 @@ function DashboardPage({ selectedFarm, alerts = [], integrations = [], onSelectA
     }
 
     onSelectAlert?.(alertId);
-    navigate(`/alerts/${alertId}`, {
-      state: { focusAlertId: alertId, from: '/dashboard' },
-    });
+    navigate(
+      { pathname: `/alerts/${alertId}`, search: modeSearch },
+      {
+        state: { focusAlertId: alertId, from: '/dashboard' },
+      },
+    );
   }
 
   return (

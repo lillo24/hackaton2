@@ -13,11 +13,17 @@ import DashboardPage from './pages/DashboardPage';
 
 const DEFAULT_FARM_ID = farmTypes[0].id;
 
+function buildPreviewModeSearch(search) {
+  const mode = new URLSearchParams(search).get('mode');
+  return mode ? `?mode=${mode}` : '';
+}
+
 function LegacyAlertRoute({ alerts, onSelectAlert }) {
   const { alertId } = useParams();
   const location = useLocation();
   const hasAlert = alerts.some((alert) => alert.id === alertId);
   const returnTo = typeof location.state?.from === 'string' ? location.state.from : '/alerts';
+  const modeSearch = buildPreviewModeSearch(location.search);
 
   useEffect(() => {
     onSelectAlert(hasAlert ? alertId : null);
@@ -27,7 +33,7 @@ function LegacyAlertRoute({ alerts, onSelectAlert }) {
     <Navigate
       replace
       state={hasAlert ? { from: returnTo, focusAlertId: alertId } : { from: returnTo }}
-      to="/alert"
+      to={{ pathname: '/alert', search: modeSearch }}
     />
   );
 }

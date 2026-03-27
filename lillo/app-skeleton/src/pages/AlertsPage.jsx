@@ -112,6 +112,8 @@ function AlertsPage({
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
+  const previewMode = searchParams.get('mode');
+  const modeSearch = previewMode ? `?mode=${previewMode}` : '';
   const focusedAlertId = location.state?.focusAlertId ?? selectedAlertId;
   const rankedAlerts = useMemo(() => rankAlerts(alerts), [alerts]);
   const sourceOptions = useMemo(() => {
@@ -255,6 +257,7 @@ function AlertsPage({
               isHistorical={Boolean(alert.isHistorical)}
               isFocused={focusedAlertId === alert.id}
               key={alert.id}
+              linkSearch={modeSearch}
               returnTo={returnTo}
               onOpenAlert={handleOpenAlert}
             />

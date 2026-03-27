@@ -1,13 +1,24 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import './RoadmapPresentation.css';
+import mapBigImage from '../../../../map-big.png';
+import mapLittleImage from '../../../../map-little.png';
 
-const TOTAL_STEPS = 8;
+const TOTAL_STEPS = 9;
 const FOCUS_STEP = 5;
 const FEATURED_STEP = 6;
+const COSTS_STEP = FEATURED_STEP + 1;
+const CONSORZI_REACH_STEP = FEATURED_STEP + 2;
+const CONSORZI_REACH_LOCAL_VALUE = 458;
+const CONSORZI_REACH_EXPANDED_VALUE = 25000;
+const AZIENDE_PER_CONSORZIO = 50;
+const JACKPOT_ROLL_DURATION_MS = 1280;
+const JACKPOT_ROLL_FREQUENCY = 56;
+const JACKPOT_MIN_JITTER = 12;
 const IDENTIKIT_DELAY_MS = 360;
 const SECOND_FARMER_DELAY_MS = 2960;
 const SECOND_IDENTIKIT_DELAY_MS = 360;
 const ROADMAP_STEP_STORAGE_KEY = 'app-shell-roadmap-step';
+const ITALIAN_NUMBER_FORMATTER = new Intl.NumberFormat('it-IT');
 
 const CONSORZIO_CENTER = { x: 50, y: 50 };
 const FARMER_ARC_ANGLES = [-72, -46, -20, 20, 46, 72];
@@ -15,6 +26,10 @@ const FARMER_ARC_RADIUS = { x: 30, y: 27 };
 
 function formatPoint(value) {
   return Number(value.toFixed(2));
+}
+
+function formatItalianNumber(value) {
+  return ITALIAN_NUMBER_FORMATTER.format(value);
 }
 
 function clampRoadmapStep(step) {
@@ -261,6 +276,8 @@ function RoadmapPresentation() {
   const [activeProfileIndex, setActiveProfileIndex] = useState(() => (step > FOCUS_STEP ? profileSequences.length - 1 : 0));
   const [revealedProfileIds, setRevealedProfileIds] = useState(() => (step > FOCUS_STEP ? profileSequences.map((sequence) => sequence.id) : []));
   const [profileSequenceComplete, setProfileSequenceComplete] = useState(() => step > FOCUS_STEP);
+  const [isConsorziReachExpanded, setIsConsorziReachExpanded] = useState(false);
+  const [displayedConsorziCount, setDisplayedConsorziCount] = useState(CONSORZI_REACH_LOCAL_VALUE);
   const [connectionLayout, setConnectionLayout] = useState({
     width: 0,
     height: 0,
@@ -272,6 +289,7 @@ function RoadmapPresentation() {
   });
   const roadmapRef = useRef(null);
   const stageRef = useRef(null);
+  const jackpotCountRef = useRef(CONSORZI_REACH_LOCAL_VALUE);
   const companyRef = useRef(null);
   const consorzioRef = useRef(null);
   const featuredFarmerRef = useRef(null);
@@ -288,8 +306,16 @@ function RoadmapPresentation() {
   const showIdentikit = step >= FOCUS_STEP && revealedProfileIds.length > 0;
   // Keep the featured farmer mounted into the Costi step so it can retract as part of the reverse animation.
   const showFeaturedCase = step >= FEATURED_STEP;
-  const showCosts = step >= FEATURED_STEP + 1;
-  const canAdvance = step < lastStep && !(showProfileFocus && !profileSequenceComplete);
+  const showCostsLayout = step >= COSTS_STEP;
+  const showCosts = step === COSTS_STEP;
+  const showConsorziReach = step >= CONSORZI_REACH_STEP;
+  const isConsorziReachStep = step === CONSORZI_REACH_STEP;
+  const canAdvanceConsorziReach = isConsorziReachStep && !isConsorziReachExpanded;
+  const canAdvance = (step < lastStep && !(showProfileFocus && !profileSequenceComplete)) || canAdvanceConsorziReach;
+  const reachableConsorziCount = isConsorziReachExpanded ? CONSORZI_REACH_EXPANDED_VALUE : CONSORZI_REACH_LOCAL_VALUE;
+  const formattedReachableConsorzi = formatItalianNumber(displayedConsorziCount);
+  const reachableAziendeCount = displayedConsorziCount * AZIENDE_PER_CONSORZIO;
+  const formattedReachableAziende = formatItalianNumber(reachableAziendeCount);
   const activeProfileSequence = profileSequences[activeProfileIndex];
   const activeProfileFarmerId = activeProfileSequence.farmerId;
   const revealedProfileSequences = profileSequences.filter((sequence) => revealedProfileIds.includes(sequence.id));
@@ -309,6 +335,77 @@ function RoadmapPresentation() {
       console.warn('Roadmap step persistence skipped because sessionStorage is unavailable.', error);
     }
   }, [step]);
+
+  useEffect(() => {
+    if (!isConsorziReachStep) {
+      setIsConsorziReachExpanded(false);
+    }
+  }, [isConsorziReachStep]);
+
+  useEffect(() => {
+    if (!isConsorziReachStep || isConsorziReachExpanded) {
+      return;
+    }
+
+    // Re-prime the slot-style roll whenever the local phase is reached.
+    jackpotCountRef.current = 0;
+    setDisplayedConsorziCount(0);
+  }, [isConsorziReachStep, isConsorziReachExpanded]);
+
+  useEffect(() => {
+    if (!showConsorziReach) {
+      jackpotCountRef.current = CONSORZI_REACH_LOCAL_VALUE;
+      setDisplayedConsorziCount(CONSORZI_REACH_LOCAL_VALUE);
+      return undefined;
+    }
+
+    const targetValue = reachableConsorziCount;
+    const startValue = jackpotCountRef.current;
+
+    if (startValue >= targetValue) {
+      jackpotCountRef.current = targetValue;
+      setDisplayedConsorziCount(targetValue);
+      return undefined;
+    }
+
+    let frameId = 0;
+    let animationStart = 0;
+    let previousValue = startValue;
+
+    const animateJackpotRoll = (timestamp) => {
+      if (animationStart === 0) {
+        animationStart = timestamp;
+      }
+
+      const elapsed = timestamp - animationStart;
+      const progress = Math.min(elapsed / JACKPOT_ROLL_DURATION_MS, 1);
+      const easedProgress = 1 - (1 - progress) ** 4;
+      const baseValue = startValue + (targetValue - startValue) * easedProgress;
+      const jitterWindow = progress < 0.84 ? 1 - progress / 0.84 : 0;
+      const jitterAmplitude = Math.max((targetValue - startValue) * 0.08, JACKPOT_MIN_JITTER) * jitterWindow;
+      const jitter = Math.abs(Math.sin(progress * JACKPOT_ROLL_FREQUENCY)) * jitterAmplitude;
+      const candidate = Math.round(Math.min(targetValue, baseValue + jitter));
+      const nextValue = Math.max(previousValue, candidate);
+
+      previousValue = nextValue;
+      jackpotCountRef.current = nextValue;
+      setDisplayedConsorziCount(nextValue);
+
+      if (progress < 1) {
+        frameId = window.requestAnimationFrame(animateJackpotRoll);
+        return;
+      }
+
+      jackpotCountRef.current = targetValue;
+      setDisplayedConsorziCount(targetValue);
+    };
+
+    frameId = window.requestAnimationFrame(animateJackpotRoll);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [showConsorziReach, reachableConsorziCount]);
 
   useEffect(() => {
     if (step < FOCUS_STEP) {
@@ -512,12 +609,22 @@ function RoadmapPresentation() {
   }, [showBridge, showFarmers, showCompany, showConsorzio, showFeaturedCase, step]);
 
   const advanceStep = () => {
+    if (isConsorziReachStep && !isConsorziReachExpanded) {
+      setIsConsorziReachExpanded(true);
+      return;
+    }
+
     if (canAdvance) {
       setStep((current) => Math.min(lastStep, current + 1));
     }
   };
 
   const retreatStep = () => {
+    if (isConsorziReachStep && isConsorziReachExpanded) {
+      setIsConsorziReachExpanded(false);
+      return;
+    }
+
     if (canGoBack) {
       setStep((current) => Math.max(0, current - 1));
     }
@@ -546,7 +653,7 @@ function RoadmapPresentation() {
 
   return (
     <article
-      className={`roadmap-presentation roadmap-presentation--step-${step}${showProfileFocus ? ' roadmap-presentation--profile-focus' : ''}${showIdentikit ? ' roadmap-presentation--identikit' : ''}${showFeaturedCase ? ' roadmap-presentation--featured-case' : ''}${showCosts ? ' roadmap-presentation--costs' : ''}`}
+      className={`roadmap-presentation roadmap-presentation--step-${step}${showProfileFocus ? ' roadmap-presentation--profile-focus' : ''}${showIdentikit ? ' roadmap-presentation--identikit' : ''}${showFeaturedCase ? ' roadmap-presentation--featured-case' : ''}${showCostsLayout ? ' roadmap-presentation--costs' : ''}${showConsorziReach ? ' roadmap-presentation--consorzi-reach' : ''}`}
       onClick={handleStageClick}
       onKeyDown={handleKeyDown}
       ref={roadmapRef}
@@ -758,6 +865,42 @@ function RoadmapPresentation() {
                 </ul>
               </div>
             </div>
+            </div>
+          </aside>
+        ) : null}
+
+        {showConsorziReach ? (
+          <aside aria-label="Espansione consorzi" className="roadmap-market-reach">
+            <div className="roadmap-market-reach__panel">
+              <header className="roadmap-market-reach__header">
+                <p className="roadmap-market-reach__location" aria-live="polite">
+                  <span className={`roadmap-market-reach__location-text${isConsorziReachExpanded ? '' : ' is-visible'}`}>
+                    Trentino
+                  </span>
+                  <span className={`roadmap-market-reach__location-text roadmap-market-reach__location-text--next${isConsorziReachExpanded ? ' is-visible' : ''}`}>
+                    Nord Italia
+                  </span>
+                </p>
+              </header>
+
+              <div className="roadmap-market-reach__map-area">
+                <div className={`roadmap-market-reach__map-stack${isConsorziReachExpanded ? ' is-expanded' : ''}`}>
+                  {/* Source files are inverted by name: `map-big` is Trentino zoom, `map-little` is Nord Italia. */}
+                  <img alt="Mappa Trentino" className="roadmap-market-reach__map roadmap-market-reach__map--little" src={mapBigImage} />
+                  <img alt="Mappa Nord Italia" className="roadmap-market-reach__map roadmap-market-reach__map--big" src={mapLittleImage} />
+                </div>
+              </div>
+
+              <div className="roadmap-market-reach__metrics">
+                <div className="roadmap-market-reach__metric">
+                  <p className="roadmap-market-reach__metric-value">{formattedReachableConsorzi}</p>
+                  <p className="roadmap-market-reach__metric-label">consorzi</p>
+                </div>
+                <div className="roadmap-market-reach__metric">
+                  <p className="roadmap-market-reach__metric-value">{formattedReachableAziende}</p>
+                  <p className="roadmap-market-reach__metric-label">aziende agricole</p>
+                </div>
+              </div>
             </div>
           </aside>
         ) : null}

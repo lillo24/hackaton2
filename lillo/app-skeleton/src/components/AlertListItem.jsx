@@ -205,6 +205,7 @@ function AlertListItem({
   isHistorical = false,
   isFocused = false,
   returnTo = '/alerts',
+  linkSearch = '',
   onOpenAlert,
 }) {
   const className = `alert-list-item alert-list-item--${alert.severity}${isFocused ? ' is-focused' : ''}${
@@ -250,7 +251,7 @@ function AlertListItem({
       className={className}
       onClick={() => onOpenAlert?.(alert.id)}
       state={{ focusAlertId: alert.id, from: returnTo }}
-      to={`/alerts/${alert.id}`}
+      to={{ pathname: `/alerts/${alert.id}`, search: linkSearch }}
       style={{ '--delay': `${index * 60}ms` }}
     >
       {cardContent}

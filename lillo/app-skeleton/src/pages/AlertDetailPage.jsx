@@ -6,6 +6,7 @@ import PageHeader from '../components/PageHeader';
 import SectionCard from '../components/SectionCard';
 
 const DIAGNOSIS_FLOW_PRESETS = [
+  // Only dedicated diagnosis-ready alerts use the premium diagnosis flow.
   {
     id: 'peronospora-risk',
     matches(alert) {
@@ -16,6 +17,7 @@ const DIAGNOSIS_FLOW_PRESETS = [
       severityLabel: 'Alto',
       summary:
         'Pioggia recente, bagnatura fogliare persistente e umidita elevata indicano una finestra favorevole alla Peronospora.',
+      visualVariant: 'disease',
       plantLabel: 'Peronospora',
       problemTitle: 'Problema identificato',
       problemSummary: 'I dati rilevati indicano una probabile finestra di infezione da Peronospora.',
@@ -69,6 +71,68 @@ const DIAGNOSIS_FLOW_PRESETS = [
       ],
       actionClosingNote:
         'Agire presto, con il prodotto e il timing corretti, aiuta a contenere la diffusione e a non perdere la finestra di intervento piu efficace.',
+    },
+  },
+  {
+    id: 'gelate-risk',
+    matches(alert) {
+      return alert?.id === 'frost-pocket';
+    },
+    profile: {
+      title: 'Rischio Gelate',
+      severityLabel: 'Critico',
+      summary: "Sensori e previsioni indicano un evento di gelo prima dell'alba nelle file piu fredde.",
+      visualVariant: 'frost',
+      plantLabel: 'Gelata imminente',
+      problemTitle: 'Problema identificato',
+      problemSummary: 'I dati rilevati indicano un probabile evento di gelata localizzata nel terrazzamento piu freddo.',
+      evidenceItems: [
+        'Temperatura aria in rapido calo',
+        'Minimo previsto sotto zero',
+        'Vento debole',
+        'Storico di sacca fredda nel blocco',
+      ],
+      signalsTitle: 'Segnali rilevati',
+      signalItems: [
+        {
+          label: 'Previsione notturna',
+          type: 'weather',
+          description: "Il minimo previsto scende a -1.8 °C prima dell'alba e il vento restera debole, favorendo l'accumulo di aria fredda.",
+        },
+        {
+          label: 'Sensori aria',
+          type: 'sensor',
+          description: 'Nel blocco la temperatura e gia scesa a 0.4 °C con umidita elevata negli ultimi cicli di campionamento.',
+        },
+        {
+          label: 'Storico appezzamento',
+          type: 'sensor',
+          description: 'Questo terrazzamento si raffredda prima delle file vicine e concentra piu facilmente le sacche fredde.',
+        },
+      ],
+      reasoningTitle: 'Perche pensiamo sia Gelata',
+      reasoningText: "Il blocco sta gia perdendo temperatura rapidamente. Le previsioni portano il minimo sotto zero prima dell'alba, il vento restera debole e questo terrazzamento tende ad accumulare aria fredda. La combinazione di raffreddamento reale, previsione critica e comportamento storico rende probabile una gelata localizzata.",
+      interpretationText: "Abbiamo combinato sensori di campo, previsione notturna e comportamento storico del blocco per capire se il calo termico restera solo un raffreddamento o diventera una gelata. In questo caso il rischio e critico, quindi la protezione va attivata subito.",
+      actionTitle: 'Cosa fare adesso',
+      actionSteps: [
+        {
+          title: 'Attiva subito la protezione anti-gelo',
+          text: 'Avvia i sistemi disponibili prima che la temperatura scenda sotto zero in modo stabile, secondo il protocollo aziendale.',
+        },
+        {
+          title: 'Dai priorita alle file piu fredde',
+          text: "Concentrati prima sul terrazzamento inferiore e sulle zone dove l'aria fredda si accumula piu facilmente.",
+        },
+        {
+          title: "Controlla il trend fino all'alba",
+          text: "Verifica l'evoluzione di temperatura, vento e umidita per capire se il rischio resta localizzato o si estende al resto del vigneto.",
+        },
+        {
+          title: 'Controlla i germogli dopo la finestra critica',
+          text: 'Appena termina la finestra di gelo, verifica i tessuti piu esposti per valutare eventuali danni e le azioni successive.',
+        },
+      ],
+      actionClosingNote: 'Nelle gelate conta arrivare prima della soglia critica: anticipare la protezione riduce il danno ai germogli e limita le perdite di inizio stagione.',
     },
   },
 ];
