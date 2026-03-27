@@ -261,14 +261,14 @@ function AlertsPage({
       <section aria-label="Alert filters" className="alerts-filter-panel">
         <div className="filter-grid filter-grid--alerts">
           <label className="filter-field" htmlFor="severity-filter">
-            Severity
+            Gravita
             <select
               className="filter-control"
               id="severity-filter"
               onChange={(event) => updateFilter('severity', event.target.value)}
               value={severityFilter}
             >
-              <option value="all">All</option>
+              <option value="all">Tutte</option>
               {alertSeverityScale.map((severity) => (
                 <option key={severity} value={severity}>
                   {formatOptionLabel(severity)}
@@ -278,14 +278,14 @@ function AlertsPage({
           </label>
 
           <label className="filter-field" htmlFor="source-filter">
-            Source
+            Fonte
             <select
               className="filter-control"
               id="source-filter"
               onChange={(event) => updateFilter('source', event.target.value)}
               value={sourceFilter}
             >
-              <option value="all">All</option>
+              <option value="all">Tutte</option>
               {sourceOptions.map((source) => (
                 <option key={source.id} value={source.id}>
                   {source.label}
@@ -295,14 +295,14 @@ function AlertsPage({
           </label>
 
           <div className="filter-field filter-field--toggle">
-            <span>History</span>
+            <span>Storico</span>
             <button
               aria-pressed={historyEnabled}
               className={`filter-toggle${historyEnabled ? ' is-active' : ''}`}
               onClick={toggleHistory}
               type="button"
             >
-              History
+              Storico
             </button>
           </div>
         </div>
