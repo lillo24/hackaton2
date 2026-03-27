@@ -5,12 +5,28 @@ import SectionCard from '../components/SectionCard';
 import { adminCustomers } from '../data/adminMockData';
 import { useAdminDocumentScroll } from './adminAccess';
 
+const alertSeverityWeights = {
+  critical: 8,
+  high: 4,
+  medium: 2,
+  low: 1,
+};
+
 function formatAverage(value) {
   if (!Number.isFinite(value)) {
     return '0.0';
   }
 
   return value.toFixed(1);
+}
+
+function getAlertPriorityLoad(customer) {
+  return (
+    customer.criticalAlerts * alertSeverityWeights.critical +
+    customer.highAlerts * alertSeverityWeights.high +
+    customer.mediumAlerts * alertSeverityWeights.medium +
+    customer.lowAlerts * alertSeverityWeights.low
+  );
 }
 
 function matchesAlertVolume(customer, filterValue) {
@@ -32,14 +48,22 @@ function matchesAlertVolume(customer, filterValue) {
 
 function compareCustomers(left, right, sortValue) {
   if (sortValue === 'least-alerts') {
-    return left.activeAlerts - right.activeAlerts || left.farmerName.localeCompare(right.farmerName);
+    return (
+      getAlertPriorityLoad(left) - getAlertPriorityLoad(right) ||
+      left.activeAlerts - right.activeAlerts ||
+      left.farmerName.localeCompare(right.farmerName)
+    );
   }
 
   if (sortValue === 'name') {
     return left.farmerName.localeCompare(right.farmerName);
   }
 
-  return right.activeAlerts - left.activeAlerts || left.farmerName.localeCompare(right.farmerName);
+  return (
+    getAlertPriorityLoad(right) - getAlertPriorityLoad(left) ||
+    right.activeAlerts - left.activeAlerts ||
+    left.farmerName.localeCompare(right.farmerName)
+  );
 }
 
 function AdminPage() {
@@ -95,8 +119,8 @@ function AdminPage() {
     <div className="admin-shell">
       <main className="admin-page">
         <PageHeader
-          description="Panoramica clienti per monitorare il carico di allerte, la copertura del servizio e gli account che richiedono un intervento rapido."
-          title="Admin"
+          description="Panoramica consorziati per monitorare il carico di allerte, la copertura del servizio e gli account che richiedono un intervento rapido."
+          title="Consorzio"
           trailing={
             <div className="admin-header-actions">
               <Link className="admin-button admin-button--ghost" to="/dashboard?mode=roadmap">
@@ -129,63 +153,63 @@ function AdminPage() {
           <SectionCard>
             <div className="admin-toolbar">
               <label className="filter-field" htmlFor="admin-search">
-              Cerca
-              <input
-                className="filter-control"
-                id="admin-search"
-                onChange={(event) => setSearchValue(event.target.value)}
-                placeholder="Cerca agricoltore, azienda o località"
-                type="search"
-                value={searchValue}
-              />
+                Cerca
+                <input
+                  className="filter-control"
+                  id="admin-search"
+                  onChange={(event) => setSearchValue(event.target.value)}
+                  placeholder="Cerca agricoltore, azienda o località"
+                  type="search"
+                  value={searchValue}
+                />
               </label>
 
-            <label className="filter-field" htmlFor="admin-location">
-              Località
-              <select
-                className="filter-control"
-                id="admin-location"
-                onChange={(event) => setLocationFilter(event.target.value)}
-                value={locationFilter}
-              >
-                <option value="all">Tutte le località</option>
-                {locationOptions.map((location) => (
-                  <option key={location} value={location}>
-                    {location}
-                  </option>
-                ))}
-              </select>
-            </label>
+              <label className="filter-field" htmlFor="admin-location">
+                Località
+                <select
+                  className="filter-control"
+                  id="admin-location"
+                  onChange={(event) => setLocationFilter(event.target.value)}
+                  value={locationFilter}
+                >
+                  <option value="all">Tutte le località</option>
+                  {locationOptions.map((location) => (
+                    <option key={location} value={location}>
+                      {location}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
-            <label className="filter-field" htmlFor="admin-alert-volume">
-              Numero di allerte
-              <select
-                className="filter-control"
-                id="admin-alert-volume"
-                onChange={(event) => setAlertVolumeFilter(event.target.value)}
-                value={alertVolumeFilter}
-              >
-                <option value="all">Tutte</option>
-                <option value="zero">0 allerte</option>
-                <option value="one-two">1-2 allerte</option>
-                <option value="three-five">3-5 allerte</option>
-                <option value="six-plus">6+ allerte</option>
-              </select>
-            </label>
+              <label className="filter-field" htmlFor="admin-alert-volume">
+                Numero di allerte
+                <select
+                  className="filter-control"
+                  id="admin-alert-volume"
+                  onChange={(event) => setAlertVolumeFilter(event.target.value)}
+                  value={alertVolumeFilter}
+                >
+                  <option value="all">Tutte</option>
+                  <option value="zero">0 allerte</option>
+                  <option value="one-two">1-2 allerte</option>
+                  <option value="three-five">3-5 allerte</option>
+                  <option value="six-plus">6+ allerte</option>
+                </select>
+              </label>
 
-            <label className="filter-field" htmlFor="admin-sort">
-              Ordina
-              <select
-                className="filter-control"
-                id="admin-sort"
-                onChange={(event) => setSortValue(event.target.value)}
-                value={sortValue}
-              >
-                <option value="most-alerts">Più allerte</option>
-                <option value="least-alerts">Meno allerte</option>
-                <option value="name">Nome A-Z</option>
-              </select>
-            </label>
+              <label className="filter-field" htmlFor="admin-sort">
+                Ordina
+                <select
+                  className="filter-control"
+                  id="admin-sort"
+                  onChange={(event) => setSortValue(event.target.value)}
+                  value={sortValue}
+                >
+                  <option value="most-alerts">Più allerte pesate</option>
+                  <option value="least-alerts">Meno allerte pesate</option>
+                  <option value="name">Nome A-Z</option>
+                </select>
+              </label>
             </div>
           </SectionCard>
         </div>
@@ -204,7 +228,7 @@ function AdminPage() {
                   aria-label={`Apri i dettagli di ${customer.farmerName}`}
                   className="admin-customer-link"
                   key={customer.id}
-                  to={`/admin/customers/${customer.id}`}
+                  to={`/consorzio/customers/${customer.id}`}
                 >
                   <article
                     className={`admin-customer-card${customer.criticalAlerts > 0 ? ' admin-customer-card--critical' : ''}`}

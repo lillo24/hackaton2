@@ -191,12 +191,12 @@ function AdminCustomerPage() {
         <main className="admin-page admin-page--detail">
           <SectionCard>
             <div className="admin-empty-state admin-empty-state--detail">
-              <p className="admin-access__eyebrow">Cliente admin</p>
+              <p className="admin-access__eyebrow">Cliente consorzio</p>
               <h1>Cliente non trovato</h1>
-              <p>Il record cliente richiesto non esiste nell'attuale set di dati mock dell'admin.</p>
+              <p>Il record cliente richiesto non esiste nell'attuale set di dati mock del consorzio.</p>
               <div className="admin-inline-actions">
-                <Link className="admin-button admin-button--primary" to="/admin">
-                  Torna all'admin
+                <Link className="admin-button admin-button--primary" to="/consorzio">
+                  Torna al consorzio
                 </Link>
               </div>
             </div>
@@ -214,8 +214,8 @@ function AdminCustomerPage() {
           title={customer.farmerName}
           trailing={
             <div className="admin-header-actions">
-              <Link className="admin-button admin-button--ghost" to="/admin">
-                Torna all'admin
+              <Link className="admin-button admin-button--ghost" to="/consorzio">
+                Torna al consorzio
               </Link>
             </div>
           }
@@ -329,8 +329,8 @@ function AdminCustomerPage() {
                 <h2>{alertFilter === 'resolved' ? 'Nessuna allerta risolta' : 'Nessuna allerta attiva'}</h2>
                 <p>
                   {alertFilter === 'resolved'
-                    ? 'Le allerte risolte del cliente compariranno qui una volta chiusi i relativi problemi nella console admin mock.'
-                    : 'Questo account al momento non presenta criticità nella console admin mock. Le nuove allerte compariranno qui quando verranno generate.'}
+                    ? 'Le allerte risolte del cliente compariranno qui una volta chiusi i relativi problemi nella console consorzio mock.'
+                    : 'Questo account al momento non presenta criticità nella console consorzio mock. Le nuove allerte compariranno qui quando verranno generate.'}
                 </p>
               </div>
             </SectionCard>
