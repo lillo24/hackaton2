@@ -297,12 +297,16 @@ function AlertsPage({
           <div className="filter-field filter-field--toggle">
             <span>Storico</span>
             <button
-              aria-pressed={historyEnabled}
+              aria-checked={historyEnabled}
+              aria-label={`Storico ${historyEnabled ? 'attivo' : 'disattivato'}`}
               className={`filter-toggle${historyEnabled ? ' is-active' : ''}`}
               onClick={toggleHistory}
+              role="switch"
               type="button"
             >
-              Storico
+              <span aria-hidden="true" className="filter-toggle__track">
+                <span className="filter-toggle__thumb" />
+              </span>
             </button>
           </div>
         </div>
