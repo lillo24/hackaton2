@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import AlertDetailBlock from '../components/AlertDetailBlock';
 import PageHeader from '../components/PageHeader';
 import SectionCard from '../components/SectionCard';
 import StatusBadge from '../components/StatusBadge';
 import { adminCustomers } from '../data/adminMockData';
-import AdminAccessGate, { ADMIN_ACCESS_KEY, ADMIN_PASSCODE, hasMockAdminAccess, useAdminDocumentScroll } from './adminAccess';
+import { useAdminDocumentScroll } from './adminAccess';
 
 const ACTIVE_ALERT_STATUSES = new Set(['new', 'active', 'open', 'ongoing', 'monitoring', 'in-progress', 'in_progress']);
 const RESOLVED_ALERT_STATUSES = new Set(['resolved', 'closed', 'dismissed', 'completed']);
@@ -128,14 +128,7 @@ function AdminCustomerAlert({ alert }) {
 function AdminCustomerPage() {
   useAdminDocumentScroll();
   const { customerId } = useParams();
-  const [hasAccess, setHasAccess] = useState(hasMockAdminAccess);
-  const [passcode, setPasscode] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
   const [alertFilter, setAlertFilter] = useState('active');
-
-  useEffect(() => {
-    setHasAccess(hasMockAdminAccess());
-  }, []);
 
   const customer = useMemo(
     () => adminCustomers.find((candidate) => candidate.id === customerId) ?? null,
@@ -174,31 +167,6 @@ function AdminCustomerPage() {
   );
   const alertFilterCount = alertFilter === 'resolved' ? resolvedAlerts.length : activeAlerts.length;
   const alertFilterLabel = alertFilter === 'resolved' ? 'resolved' : 'active';
-
-  function handleGateSubmit(event) {
-    event.preventDefault();
-
-    if (passcode !== ADMIN_PASSCODE) {
-      setErrorMessage('Use the demo passcode `azienda-demo` to open the mock admin console.');
-      return;
-    }
-
-    window.sessionStorage.setItem(ADMIN_ACCESS_KEY, 'true');
-    setHasAccess(true);
-    setPasscode('');
-    setErrorMessage('');
-  }
-
-  if (!hasAccess) {
-    return (
-      <AdminAccessGate
-        errorMessage={errorMessage}
-        onPasscodeChange={setPasscode}
-        onSubmit={handleGateSubmit}
-        passcode={passcode}
-      />
-    );
-  }
 
   if (!customer) {
     return (

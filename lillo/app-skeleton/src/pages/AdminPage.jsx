@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
 import SectionCard from '../components/SectionCard';
 import { adminCustomers } from '../data/adminMockData';
-import AdminAccessGate, { ADMIN_ACCESS_KEY, ADMIN_PASSCODE, hasMockAdminAccess, useAdminDocumentScroll } from './adminAccess';
+import { useAdminDocumentScroll } from './adminAccess';
 
 function formatAverage(value) {
   if (!Number.isFinite(value)) {
@@ -44,17 +44,10 @@ function compareCustomers(left, right, sortValue) {
 
 function AdminPage() {
   useAdminDocumentScroll();
-  const [hasAccess, setHasAccess] = useState(hasMockAdminAccess);
-  const [passcode, setPasscode] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [locationFilter, setLocationFilter] = useState('all');
   const [alertVolumeFilter, setAlertVolumeFilter] = useState('all');
   const [sortValue, setSortValue] = useState('most-alerts');
-
-  useEffect(() => {
-    setHasAccess(hasMockAdminAccess());
-  }, []);
 
   const locationOptions = useMemo(
     () =>
@@ -98,38 +91,6 @@ function AdminPage() {
     };
   }, []);
 
-  function handleGateSubmit(event) {
-    event.preventDefault();
-
-    if (passcode !== ADMIN_PASSCODE) {
-      setErrorMessage('Use the demo passcode `azienda-demo` to open the mock admin console.');
-      return;
-    }
-
-    window.sessionStorage.setItem(ADMIN_ACCESS_KEY, 'true');
-    setHasAccess(true);
-    setPasscode('');
-    setErrorMessage('');
-  }
-
-  function handleExitAdmin() {
-    window.sessionStorage.removeItem(ADMIN_ACCESS_KEY);
-    setHasAccess(false);
-    setPasscode('');
-    setErrorMessage('');
-  }
-
-  if (!hasAccess) {
-    return (
-      <AdminAccessGate
-        errorMessage={errorMessage}
-        onPasscodeChange={setPasscode}
-        onSubmit={handleGateSubmit}
-        passcode={passcode}
-      />
-    );
-  }
-
   return (
     <div className="admin-shell">
       <main className="admin-page">
@@ -138,11 +99,8 @@ function AdminPage() {
           title="Admin"
           trailing={
             <div className="admin-header-actions">
-              <button className="admin-button" onClick={handleExitAdmin} type="button">
-                Exit admin
-              </button>
-              <Link className="admin-button admin-button--ghost" to="/dashboard">
-                Back to dashboard
+              <Link className="admin-button admin-button--ghost" to="/dashboard?mode=roadmap">
+                Back to roadmap
               </Link>
             </div>
           }
