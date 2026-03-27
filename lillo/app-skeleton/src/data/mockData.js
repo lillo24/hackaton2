@@ -450,46 +450,46 @@ export const alertTemplates = [
       orchard: 'orchard-blossom-lane',
     },
     titles: {
-      vineyard: 'Freeze risk',
-      orchard: 'Frost pocket risk',
+      vineyard: 'Rischio Gelate',
+      orchard: 'Rischio gelate nelle sacche fredde',
     },
     summaries: {
-      vineyard: 'Sensors and forecast both point to a frost event before sunrise in the coldest rows.',
-      orchard: 'Blossom-sensitive rows are entering a temperature band that requires frost protection prep.',
+      vineyard: "Sensori e previsioni indicano un evento di gelo prima dell'alba nelle file piu fredde.",
+      orchard: 'Le file sensibili alla fioritura stanno entrando in una fascia termica che richiede preparazione anti-gelo.',
     },
     reasons: {
-      vineyard: 'Field cooling, weak wind, and terrace history are aligning into a freeze event.',
-      orchard: 'The orchard block is tracking below the blossom safety margin while airflow is expected to stay weak.',
+      vineyard: 'Raffreddamento del campo, vento debole e storico del terrazzamento stanno convergendo verso un evento di gelo.',
+      orchard: "Il blocco del frutteto sta scendendo sotto il margine di sicurezza della fioritura mentre il flusso d'aria restera debole.",
     },
     integratedSummaries: {
       vineyard:
-        'Sensor cooling, sub-zero forecast, and repeated cold-air accumulation in this block all point to a likely frost event before sunrise.',
+        "Raffreddamento dei sensori, previsione sotto zero e accumulo ripetuto di aria fredda in questo blocco indicano un probabile evento di gelo prima dell'alba.",
     },
     riskScores: {
       vineyard: 94,
     },
     actions: {
-      vineyard: 'Start frost protection now. Protect the coldest rows first. Recheck the block before sunrise.',
-      orchard: 'Stage blossom protection actions and verify the coldest rows first during the next patrol.',
+      vineyard: 'Avvia subito la protezione anti-gelo. Proteggi prima le file piu fredde. Ricontrolla il blocco prima dell\'alba.',
+      orchard: 'Prepara le azioni di protezione della fioritura e verifica prima le file piu fredde durante il prossimo giro.',
     },
     relevanceReasons: {
-      vineyard: 'Primary because terrace frost exposure can damage shoots and cut early-season yield very quickly.',
-      orchard: 'Primary because blossom-stage temperature drops can cause immediate crop loss if untreated.',
+      vineyard: "Primaria perche l'esposizione al gelo sul terrazzamento puo danneggiare i germogli e ridurre rapidamente la resa di inizio stagione.",
+      orchard: 'Primaria perche i cali termici in fase di fioritura possono causare perdite immediate se non trattati.',
     },
     sourceContributions: {
       'canopy-sensor-network': {
-        signal: 'Air temperature fell to 0.4 °C while humidity stayed high across the last two sampling cycles.',
-        interpretation: 'The lower terrace is already entering the temperature band where frost can settle.',
+        signal: "La temperatura dell'aria e scesa a 0.4 °C mentre l'umidita e rimasta alta negli ultimi due cicli di campionamento.",
+        interpretation: 'Il terrazzamento basso sta gia entrando nella fascia termica in cui puo formarsi la gelata.',
       },
       'weather-model': {
-        signal: 'Forecast minimum reaches -1.8 °C before sunrise while wind stays weak, and parcel history shows this terrace cools earlier than nearby rows.',
-        interpretation: 'The next hours favor cold-air pooling and make a localized freeze event highly likely.',
+        signal: 'Il minimo previsto arriva a -1.8 °C prima dell\'alba mentre il vento resta debole, e lo storico del lotto mostra che questo terrazzamento si raffredda prima delle file vicine.',
+        interpretation: 'Le prossime ore favoriscono l\'accumulo di aria fredda e rendono molto probabile un evento di gelo localizzato.',
       },
     },
     timeline: [
-      { minutesAgo: 52, label: 'Low-wind forecast confirmed', note: 'Updated weather feed reduced expected overnight airflow.' },
-      { minutesAgo: 41, label: 'Terrain model matched', note: 'Cold-air pooling likelihood increased on the risk map.' },
-      { minutesAgo: 27, label: 'Protection alert escalated', note: 'Temperature forecast moved inside the protection threshold.' },
+      { minutesAgo: 52, label: 'Previsione vento debole confermata', note: "L'aggiornamento meteo ha ridotto il flusso d'aria notturno atteso." },
+      { minutesAgo: 41, label: 'Modello del terreno allineato', note: "La probabilita di accumulo di aria fredda e aumentata sulla mappa del rischio." },
+      { minutesAgo: 27, label: 'Allerta protezione intensificata', note: 'La previsione termica e rientrata nella soglia di protezione.' },
     ],
   },
   {

@@ -112,6 +112,7 @@ function PreviewApp({ previewMode }) {
   const location = useLocation();
   const contentRef = useRef(null);
   const contentClassName = `mobile-app__content${location.pathname === '/alerts' ? ' mobile-app__content--alerts' : ''}`;
+  const modeSearch = `?mode=${previewMode}`;
 
   useLayoutEffect(() => {
     const contentNode = contentRef.current;
@@ -135,7 +136,7 @@ function PreviewApp({ previewMode }) {
             className={({ isActive }) => `mobile-app__nav-link${isActive ? ' is-active' : ''}`}
             end={item.end}
             key={item.to}
-            to={item.to}
+            to={{ pathname: item.to, search: modeSearch }}
           >
             <NavIcon icon={item.icon} />
             <span className="mobile-app__nav-label">{item.label}</span>

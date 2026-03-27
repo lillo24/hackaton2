@@ -15,14 +15,14 @@ const DIAGNOSIS_FLOW_PRESETS = [
       title: 'Rischio Peronospora',
       severityLabel: 'Alto',
       summary:
-        'Pioggia recente, bagnatura fogliare persistente e umidita elevata indicano una finestra favorevole alla Peronospora.',
+        'Pioggia recente, bagnatura fogliare persistente e umidità elevata indicano una finestra favorevole alla Peronospora.',
       plantLabel: 'Peronospora',
       problemTitle: 'Problema identificato',
       problemSummary: 'I dati rilevati indicano una probabile finestra di infezione da Peronospora.',
       evidenceItems: [
         'Pioggia recente',
         'Bagnatura fogliare prolungata',
-        'Umidita elevata',
+        'Umidità elevata',
         'Temperature favorevoli',
       ],
       signalsTitle: 'Segnali rilevati',
@@ -30,34 +30,45 @@ const DIAGNOSIS_FLOW_PRESETS = [
         {
           label: 'Meteo',
           type: 'weather',
-          description: 'Pioggia recente e condizioni di scarsa asciugatura.',
+          description: "Pioggia recente e condizioni di scarsa asciugatura.",
         },
         {
           label: 'Sensori chioma',
           type: 'sensor',
-          description: 'Bagnatura fogliare persistente dopo l evento di pioggia.',
+          description: "Bagnatura fogliare persistente dopo l'evento di pioggia.",
         },
         {
           label: 'Sensori aria',
           type: 'sensor',
-          description: 'Umidita alta e temperatura nel range favorevole.',
+          description: 'Umidità alta e temperatura nel range favorevole.',
         },
       ],
-      reasoningTitle: 'Perche pensiamo sia Peronospora',
+      reasoningTitle: 'Perché pensiamo sia Peronospora',
       reasoningText:
-        'Dopo l evento di pioggia, la chioma e rimasta bagnata per molte ore. L umidita e rimasta elevata e la temperatura si e mantenuta in una fascia favorevole allo sviluppo della Peronospora. La combinazione di questi segnali rende probabile una finestra di infezione in questo appezzamento.',
+        'Dopo la pioggia, la chioma è rimasta bagnata a lungo. L’umidità si è mantenuta elevata e la temperatura è rimasta in un intervallo favorevole allo sviluppo della Peronospora. La combinazione di questi segnali indica una probabile finestra di infezione in questo appezzamento.',
       interpretationText:
-        'Abbiamo combinato meteo e sensori di campo per individuare condizioni compatibili con l avvio di un infezione. Il rischio e alto, quindi questo appezzamento va controllato subito.',
-      actionTitle: 'Cosa fare ora',
-      actionItems: [
-        'Controlla le foglie nelle zone piu umide.',
-        'Dai priorita alle file meno ventilate.',
-        'Verifica l evoluzione nelle prossime ore.',
-        'Valuta l intervento secondo protocollo agronomico.',
+        "Abbiamo combinato meteo e sensori di campo per individuare condizioni compatibili con l'avvio di un'infezione. Il rischio è alto, quindi questo appezzamento va controllato subito.",
+      actionTitle: 'Cosa fare adesso',
+      actionSteps: [
+        {
+          title: 'Controlla le foglie più umide',
+          text: 'Cerca i primi segnali nelle zone dove l’asciugatura è più lenta.',
+        },
+        {
+          title: 'Dai priorità alle file meno ventilate',
+          text: 'Concentrati prima sulle aree dove l’umidità tende a ristagnare.',
+        },
+        {
+          title: 'Segui l’evoluzione nelle prossime ore',
+          text: 'Verifica se le condizioni favorevoli restano attive.',
+        },
+        {
+          title: 'Valuta l’intervento',
+          text: 'Procedi secondo il protocollo agronomico adottato.',
+        },
       ],
-      impactTitle: 'Perche intervenire ora conta',
-      impactText:
-        'Intervenire presto aiuta a ridurre il rischio di diffusione e a non perdere la finestra utile di trattamento.',
+      actionClosingNote:
+        'Agire presto aiuta a contenere il rischio di diffusione e a intervenire nella finestra più utile.',
     },
   },
 ];

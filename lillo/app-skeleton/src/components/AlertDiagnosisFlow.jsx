@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import StatusBadge from './StatusBadge';
 import SourceIcon from './SourceIcon';
 
@@ -42,13 +43,44 @@ function resolveSignalIconType(item) {
 }
 
 function AlertDiagnosisFlow({ alert, profile, topBadges = [] }) {
+  const actionSectionRef = useRef(null);
+  const [isActionFlowVisible, setIsActionFlowVisible] = useState(false);
   const safeTopBadges = Array.isArray(topBadges) ? topBadges.filter(Boolean) : [];
   const fieldLabel = formatFieldLabel(alert?.field);
   const timestampLabel = toItalianTimestamp(alert?.timestampLabel);
   const evidenceItems = profile.evidenceItems ?? [];
   const signalItems = profile.signalItems ?? [];
-  const actionItems = profile.actionItems ?? [];
+  const actionSteps = profile.actionSteps ?? [];
   const severityTone = alert?.severity ?? 'high';
+
+  useEffect(() => {
+    if (isActionFlowVisible) {
+      return;
+    }
+
+    const sectionElement = actionSectionRef.current;
+
+    if (!sectionElement) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsActionFlowVisible(true);
+          observer.disconnect();
+        }
+      },
+      {
+        threshold: 0.32,
+        rootMargin: '0px 0px -8% 0px',
+      },
+    );
+
+    observer.observe(sectionElement);
+
+    return () => observer.disconnect();
+  }, [isActionFlowVisible]);
 
   return (
     <article className={`diagnosis-alert diagnosis-alert--${severityTone}`}>
@@ -131,22 +163,44 @@ function AlertDiagnosisFlow({ alert, profile, topBadges = [] }) {
         <p>{profile.reasoningText}</p>
       </section>
 
-      <section className="diagnosis-section diagnosis-section--action">
+      <section
+        className={`diagnosis-section diagnosis-section--action${isActionFlowVisible ? ' is-visible' : ''}`}
+        ref={actionSectionRef}
+      >
         <header className="diagnosis-section__header">
           <h2>{profile.actionTitle}</h2>
         </header>
-        <ul className="diagnosis-action-list">
-          {actionItems.map((item) => (
-            <li key={item}>{item}</li>
+        <div
+          className={`diagnosis-action-flow${isActionFlowVisible ? ' is-visible' : ''}`}
+          role="list"
+          aria-label="Percorso azioni consigliate"
+        >
+          {actionSteps.map((step, index) => (
+            <article
+              className="diagnosis-action-step"
+              key={step.title}
+              role="listitem"
+              style={{ '--action-step-delay': `${index * 140}ms` }}
+            >
+              <div className="diagnosis-action-step__marker">
+                <span className="diagnosis-action-step__bubble">{index + 1}</span>
+              </div>
+              <div className="diagnosis-action-step__content">
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+        <ul className="diagnosis-action-list-mobile">
+          {actionSteps.map((step) => (
+            <li key={`${step.title}-mobile`}>
+              <strong>{step.title}</strong>
+              <span>{step.text}</span>
+            </li>
           ))}
         </ul>
-      </section>
-
-      <section className="diagnosis-section diagnosis-section--impact">
-        <header className="diagnosis-section__header">
-          <h2>{profile.impactTitle}</h2>
-        </header>
-        <p>{profile.impactText}</p>
+        {profile.actionClosingNote ? <p className="diagnosis-action-note">{profile.actionClosingNote}</p> : null}
       </section>
     </article>
   );
