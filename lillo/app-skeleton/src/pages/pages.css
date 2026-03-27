@@ -737,6 +737,17 @@
   align-self: stretch;
 }
 
+.mobile-app--desktop .dashboard-priority-grid__assistant {
+  width: 100%;
+  max-width: 100%;
+  justify-self: center;
+  padding-block: 0.62rem;
+}
+
+.app-shell__preview-stage--desktop-assistant-intro .mobile-app--desktop .dashboard-priority-grid__assistant {
+  animation: dashboard-assistant-desktop-expand 1680ms cubic-bezier(0.2, 0.84, 0.24, 1) both;
+}
+
 .mobile-app--desktop .dashboard-priority-grid__assistant .section-card {
   padding: 0;
   border-radius: 0;
@@ -840,6 +851,11 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.85rem;
+}
+
+.mobile-app--desktop .dashboard-page .water-level-card,
+.mobile-app--desktop .dashboard-page .soil-moisture-card {
+  padding-bottom: 0.35rem;
 }
 
 .dashboard-page .water-level-card__chart,
@@ -1170,6 +1186,23 @@
 .mobile-app--desktop .dashboard-assistant-chat__composer button svg {
   width: 18px;
   height: 18px;
+}
+
+@keyframes dashboard-assistant-desktop-expand {
+  0% {
+    max-width: 340px;
+    padding-block: 0;
+  }
+
+  62% {
+    max-width: 460px;
+    padding-block: 0.26rem;
+  }
+
+  100% {
+    max-width: 100%;
+    padding-block: 0.62rem;
+  }
 }
 
 .mobile-app--phone .dashboard-assistant-chat {
@@ -2275,7 +2308,7 @@
   background: linear-gradient(90deg, rgba(45, 138, 88, 0.42), rgba(235, 122, 43, 0.38));
   transform: scaleX(0);
   transform-origin: left center;
-  transition: transform 1450ms cubic-bezier(0.23, 0.84, 0.28, 1) 120ms;
+  transition: transform 2200ms cubic-bezier(0.23, 0.84, 0.28, 1) 220ms;
   z-index: 1;
 }
 
@@ -2345,13 +2378,13 @@
 }
 
 .diagnosis-action-flow.is-visible .diagnosis-action-step__bubble {
-  animation: diagnosis-action-bubble-in 560ms cubic-bezier(0.2, 0.84, 0.24, 1) both;
+  animation: diagnosis-action-bubble-in 980ms cubic-bezier(0.2, 0.84, 0.24, 1) both;
   animation-delay: var(--action-step-delay, 0ms);
 }
 
 .diagnosis-action-flow.is-visible .diagnosis-action-step__content {
-  animation: diagnosis-action-text-in 620ms ease-out both;
-  animation-delay: calc(var(--action-step-delay, 0ms) + 180ms);
+  animation: diagnosis-action-text-in 1050ms ease-out both;
+  animation-delay: calc(var(--action-step-delay, 0ms) + 320ms);
 }
 
 .diagnosis-action-list-mobile {
@@ -2934,6 +2967,12 @@
 
   .profile-side--identity .profile-identity-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell__preview-stage--desktop-assistant-intro .mobile-app--desktop .dashboard-priority-grid__assistant {
+    animation: none;
   }
 }
 
