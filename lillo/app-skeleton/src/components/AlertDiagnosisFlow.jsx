@@ -180,7 +180,7 @@ function AlertDiagnosisFlow({ alert, profile, topBadges = [] }) {
               className="diagnosis-action-step"
               key={step.title}
               role="listitem"
-              style={{ '--action-step-delay': `${index * 140}ms` }}
+              style={{ '--action-step-delay': `${index * 260}ms` }}
             >
               <div className="diagnosis-action-step__marker">
                 <span className="diagnosis-action-step__bubble">{index + 1}</span>

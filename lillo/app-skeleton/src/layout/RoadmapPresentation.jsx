@@ -7,6 +7,7 @@ const FEATURED_STEP = 6;
 const IDENTIKIT_DELAY_MS = 360;
 const SECOND_FARMER_DELAY_MS = 2960;
 const SECOND_IDENTIKIT_DELAY_MS = 360;
+const ROADMAP_STEP_STORAGE_KEY = 'app-shell-roadmap-step';
 
 const CONSORZIO_CENTER = { x: 50, y: 50 };
 const FARMER_ARC_ANGLES = [-72, -46, -20, 20, 46, 72];
@@ -14,6 +15,31 @@ const FARMER_ARC_RADIUS = { x: 30, y: 27 };
 
 function formatPoint(value) {
   return Number(value.toFixed(2));
+}
+
+function clampRoadmapStep(step) {
+  return Math.min(TOTAL_STEPS - 1, Math.max(0, step));
+}
+
+function readInitialRoadmapStep() {
+  if (typeof window === 'undefined') {
+    return 0;
+  }
+
+  try {
+    const rawValue = window.sessionStorage.getItem(ROADMAP_STEP_STORAGE_KEY);
+
+    if (rawValue === null) {
+      return 0;
+    }
+
+    const parsedValue = Number.parseInt(rawValue, 10);
+
+    return Number.isNaN(parsedValue) ? 0 : clampRoadmapStep(parsedValue);
+  } catch (error) {
+    console.warn('Roadmap step restore skipped because sessionStorage is unavailable.', error);
+    return 0;
+  }
 }
 
 function getElementCenter(element, stageRect) {
@@ -231,10 +257,10 @@ function ArrowIcon({ direction }) {
 }
 
 function RoadmapPresentation() {
-  const [step, setStep] = useState(0);
-  const [activeProfileIndex, setActiveProfileIndex] = useState(0);
-  const [revealedProfileIds, setRevealedProfileIds] = useState([]);
-  const [profileSequenceComplete, setProfileSequenceComplete] = useState(false);
+  const [step, setStep] = useState(() => readInitialRoadmapStep());
+  const [activeProfileIndex, setActiveProfileIndex] = useState(() => (step > FOCUS_STEP ? profileSequences.length - 1 : 0));
+  const [revealedProfileIds, setRevealedProfileIds] = useState(() => (step > FOCUS_STEP ? profileSequences.map((sequence) => sequence.id) : []));
+  const [profileSequenceComplete, setProfileSequenceComplete] = useState(() => step > FOCUS_STEP);
   const [connectionLayout, setConnectionLayout] = useState({
     width: 0,
     height: 0,
@@ -273,6 +299,18 @@ function RoadmapPresentation() {
   }, []);
 
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    try {
+      window.sessionStorage.setItem(ROADMAP_STEP_STORAGE_KEY, String(step));
+    } catch (error) {
+      console.warn('Roadmap step persistence skipped because sessionStorage is unavailable.', error);
+    }
+  }, [step]);
+
+  useEffect(() => {
     if (step < FOCUS_STEP) {
       setActiveProfileIndex(0);
       setRevealedProfileIds([]);
@@ -281,6 +319,9 @@ function RoadmapPresentation() {
     }
 
     if (step > FOCUS_STEP) {
+      setActiveProfileIndex(profileSequences.length - 1);
+      setRevealedProfileIds(profileSequences.map((sequence) => sequence.id));
+      setProfileSequenceComplete(true);
       return undefined;
     }
 

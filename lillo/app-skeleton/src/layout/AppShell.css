@@ -2,10 +2,14 @@
   --shell-padding-x: clamp(1rem, 3vw, 2.5rem);
   --shell-padding-bottom: clamp(1rem, 2.8vh, 1.75rem);
   --phone-available-height: calc(100dvh - 8.5rem);
-  --toggle-motion-duration: 0.58s;
+  --toggle-shrink-duration: 0.24s;
+  --toggle-shift-duration: 0.52s;
   --toggle-motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --toggle-shift-ease: cubic-bezier(0.18, 0.86, 0.28, 1);
   --toggle-button-duration: 0.34s;
   --toggle-button-ease: cubic-bezier(0.24, 0.9, 0.32, 1);
+  --preview-slide-duration: 0.68s;
+  --preview-slide-ease: cubic-bezier(0.18, 0.86, 0.3, 1);
   height: 100vh;
   height: 100dvh;
   display: grid;
@@ -29,11 +33,13 @@
   flex-wrap: wrap;
   min-height: 2.6rem;
   transition:
-    justify-content var(--toggle-motion-duration) var(--toggle-motion-ease),
-    padding-inline var(--toggle-motion-duration) var(--toggle-motion-ease);
+    justify-content var(--toggle-shift-duration) var(--toggle-shift-ease),
+    padding-inline var(--toggle-shift-duration) var(--toggle-shift-ease);
 }
 
 .app-shell__top-toggle--roadmap {
+  /* Enter roadmap in two beats: shrink first, then slide the wrapper left. */
+  transition-delay: var(--toggle-shrink-duration), var(--toggle-shrink-duration);
   justify-content: flex-start;
   padding-inline-start: clamp(0rem, 1vw, 0.55rem);
 }
@@ -58,7 +64,7 @@
   transform-origin: left center;
   transform: translateY(0) scale(1);
   transition:
-    transform var(--toggle-motion-duration) var(--toggle-motion-ease),
+    transform var(--toggle-shrink-duration) var(--toggle-motion-ease),
     background-color 0.44s ease,
     border-color 0.44s ease,
     box-shadow 0.44s ease,
@@ -174,12 +180,6 @@
   height: 100%;
 }
 
-.app-shell__preview-stage--phone {
-  display: grid;
-  justify-items: center;
-  align-items: center;
-}
-
 .app-shell__phone-pitch-stage {
   position: relative;
   width: min(100%, 92rem);
@@ -216,11 +216,81 @@
   cursor: pointer;
 }
 
+.app-shell__preview-stage--phone,
 .app-shell__preview-stage--desktop {
   display: grid;
   justify-items: stretch;
   align-items: stretch;
   height: 100%;
+}
+
+.app-shell__preview-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Phone/desktop swap only: keep both panels on a shared track to mimic carousel motion. */
+.app-shell__preview-carousel-track {
+  width: 200%;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  transform: translateX(0%);
+  transition: transform var(--preview-slide-duration) var(--preview-slide-ease);
+  will-change: transform;
+}
+
+.app-shell__preview-stage--desktop .app-shell__preview-carousel-track {
+  transform: translateX(-50%);
+}
+
+.app-shell__preview-carousel-panel {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  perspective: 1900px;
+}
+
+.app-shell__preview-card {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  justify-items: stretch;
+  align-items: stretch;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  opacity: 0.62;
+  filter: saturate(0.84) brightness(0.92);
+  transition:
+    transform var(--preview-slide-duration) var(--preview-slide-ease),
+    opacity 0.42s ease,
+    filter 0.42s ease;
+}
+
+.app-shell__preview-card[inert] {
+  pointer-events: none;
+}
+
+.app-shell__preview-card--phone {
+  justify-items: center;
+  align-items: center;
+  transform: translateX(-8%) rotateY(11deg) scale(0.93);
+}
+
+.app-shell__preview-card--desktop {
+  transform: translateX(8%) rotateY(-11deg) scale(0.93);
+}
+
+.app-shell__preview-stage--phone .app-shell__preview-card--phone,
+.app-shell__preview-stage--desktop .app-shell__preview-card--desktop {
+  opacity: 1;
+  filter: none;
+  transform: translateX(0) rotateY(0deg) scale(1);
 }
 
 .app-shell__preview-stage--roadmap {
@@ -460,6 +530,18 @@
   white-space: normal;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .app-shell__preview-carousel-track,
+  .app-shell__preview-card {
+    transition-duration: 0.01ms;
+  }
+
+  .app-shell__preview-stage--phone .app-shell__preview-card--desktop,
+  .app-shell__preview-stage--desktop .app-shell__preview-card--phone {
+    transform: none;
+  }
+}
+
 @media (max-width: 1200px) {
   .desktop-preview-frame {
     border-radius: 22px;
@@ -474,9 +556,12 @@
 
   .app-shell__preview-stage--phone {
     width: 100%;
+    padding-block: 0.35rem 0.6rem;
+  }
+
+  .app-shell__preview-stage--phone .app-shell__preview-card--phone {
     align-items: start;
     overflow: auto;
-    padding-block: 0.35rem 0.6rem;
   }
 
   .desktop-preview-frame {

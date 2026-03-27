@@ -49,6 +49,8 @@ const frozenSnowflakes = [
   { x: 18, y: -7, driftX: -2, drop: 15, delay: '0.5s', duration: '2.9s' },
   { x: -2, y: 0, driftX: 3, drop: 14, delay: '1.9s', duration: '3.2s' },
   { x: 14, y: 3, driftX: -4, drop: 17, delay: '1.1s', duration: '3.6s' },
+  { x: -15, y: 6, driftX: 2, drop: 13, delay: '2.2s', duration: '3.1s' },
+  { x: 8, y: 8, driftX: -2, drop: 12, delay: '1.6s', duration: '2.8s' },
 ];
 
 function renderTerrainPatternDefs() {
@@ -61,11 +63,11 @@ function renderTerrainPatternDefs() {
       </linearGradient>
 
       <pattern id="farm-fungus-pattern-relief" height="18" patternTransform="rotate(-18)" patternUnits="userSpaceOnUse" width="18">
-        <path d="M 0.8 8.2 L 7 4.5 L 13.2 8.2 L 7 11.9 Z" fill="#6a4a29" fillOpacity="0.12" />
-        <path d="M 1.4 7.2 L 7 4 L 12.6 7.2 L 7 10.4 Z" fill="#c0a06b" fillOpacity="0.48" />
-        <path d="M 2.7 6.5 L 7 4.2 L 10.6 6.2 L 7 7.7 Z" fill="#fff2cc" fillOpacity="0.34" />
-        <path d="M 9.8 17.2 L 16 13.5 L 22.2 17.2 L 16 20.9 Z" fill="#6a4a29" fillOpacity="0.1" />
-        <path d="M 10.4 16.2 L 16 13 L 21.6 16.2 L 16 19.4 Z" fill="#b48a55" fillOpacity="0.28" />
+        <path d="M 0.8 8.2 L 7 4.5 L 13.2 8.2 L 7 11.9 Z" fill="#5c3d1f" fillOpacity="0.26" />
+        <path d="M 1.4 7.2 L 7 4 L 12.6 7.2 L 7 10.4 Z" fill="#a77a44" fillOpacity="0.66" />
+        <path d="M 2.7 6.5 L 7 4.2 L 10.6 6.2 L 7 7.7 Z" fill="#f1e0ba" fillOpacity="0.22" />
+        <path d="M 9.8 17.2 L 16 13.5 L 22.2 17.2 L 16 20.9 Z" fill="#57381d" fillOpacity="0.22" />
+        <path d="M 10.4 16.2 L 16 13 L 21.6 16.2 L 16 19.4 Z" fill="#966635" fillOpacity="0.5" />
       </pattern>
 
       <pattern id="farm-frozen-pattern-frost" height="18" patternTransform="rotate(-18)" patternUnits="userSpaceOnUse" width="18">

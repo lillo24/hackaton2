@@ -7,6 +7,7 @@ import './AppShell.css';
 
 const INTRO_TERMINAL_MAX_WIDTH = 620;
 const INTRO_TERMINAL_MIN_WIDTH = 300;
+const DESKTOP_ASSISTANT_INTRO_DURATION_MS = 1680;
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
@@ -154,6 +155,8 @@ function AppShell({ alerts = [] }) {
   const stageRef = useRef(null);
   const phoneFrameRef = useRef(null);
   const [previewMode, setPreviewMode] = useState(() => resolvePreviewMode(searchParams.get('mode')));
+  const [hasPlayedDesktopAssistantIntro, setHasPlayedDesktopAssistantIntro] = useState(false);
+  const [isDesktopAssistantIntroRunning, setIsDesktopAssistantIntroRunning] = useState(false);
   const [startupSequencePending, setStartupSequencePending] = useState(
     location.pathname === '/' || location.pathname === '/dashboard',
   );
@@ -161,9 +164,11 @@ function AppShell({ alerts = [] }) {
   const [startupSequenceKey, setStartupSequenceKey] = useState(0);
   const [terminalPhase, setTerminalPhase] = useState('hidden');
   const [introLayout, setIntroLayout] = useState(null);
-  const previewApp = <PreviewApp previewMode={previewMode} />;
+  const phonePreviewApp = <PreviewApp previewMode="phone" />;
+  const desktopPreviewApp = <PreviewApp previewMode="desktop" />;
   const isRoadmap = previewMode === 'roadmap';
   const isPhonePreview = previewMode === 'phone';
+  const isDesktopPreview = previewMode === 'desktop';
   const isDashboardRoute = location.pathname === '/dashboard';
   const startupAlert = alerts[0] ?? null;
   const shouldHoldIntroStage = isPhonePreview && isDashboardRoute && startupSequencePending;
@@ -174,6 +179,31 @@ function AppShell({ alerts = [] }) {
   useEffect(() => {
     setPreviewMode(resolvePreviewMode(searchParams.get('mode')));
   }, [searchParams]);
+
+  useEffect(() => {
+    if (!isDesktopPreview || hasPlayedDesktopAssistantIntro) {
+      return undefined;
+    }
+
+    setHasPlayedDesktopAssistantIntro(true);
+    setIsDesktopAssistantIntroRunning(true);
+
+    const timeoutId = window.setTimeout(() => {
+      setIsDesktopAssistantIntroRunning(false);
+    }, DESKTOP_ASSISTANT_INTRO_DURATION_MS);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [hasPlayedDesktopAssistantIntro, isDesktopPreview]);
+
+  useEffect(() => {
+    if (isDesktopPreview || !isDesktopAssistantIntroRunning) {
+      return;
+    }
+
+    setIsDesktopAssistantIntroRunning(false);
+  }, [isDesktopAssistantIntroRunning, isDesktopPreview]);
 
   function updatePreviewMode(nextMode) {
     setPreviewMode(nextMode);
@@ -372,45 +402,69 @@ function AppShell({ alerts = [] }) {
         ) : null}
       </div>
 
-      <section className={`app-shell__preview-stage app-shell__preview-stage--${previewMode}`}>
+      <section
+        className={`app-shell__preview-stage app-shell__preview-stage--${previewMode}${
+          isDesktopAssistantIntroRunning ? ' app-shell__preview-stage--desktop-assistant-intro' : ''
+        }`}
+      >
         {isRoadmap ? (
           <RoadmapPresentation />
-        ) : previewMode === 'phone' ? (
-          <div
-            ref={stageRef}
-            className={`app-shell__phone-pitch-stage${
-              canStartTerminalSequence ? ' app-shell__phone-pitch-stage--waiting' : ''
-            }`}
-            onClick={canStartTerminalSequence ? handleStartTerminalSequence : undefined}
-          >
-            <div className="app-shell__phone-pitch-phone-layer">
-              <div className="app-shell__phone-pitch-phone-shell">
-                <PhoneFrame
-                  enableStartupSequence={shouldHoldIntroStage}
-                  onStartupSequenceComplete={handleStartupSequenceComplete}
-                  ref={phoneFrameRef}
-                  startupAlert={startupAlert}
-                  startupSequenceKey={startupSequenceKey}
-                  startupShouldBegin={phoneStartupShouldBegin}
+        ) : (
+          <div className="app-shell__preview-carousel">
+            <div className="app-shell__preview-carousel-track">
+              <div className="app-shell__preview-carousel-panel">
+                <div
+                  aria-hidden={!isPhonePreview}
+                  className="app-shell__preview-card app-shell__preview-card--phone"
+                  {...(!isPhonePreview ? { inert: '' } : {})}
                 >
-                  {previewApp}
-                </PhoneFrame>
+                  <div
+                    ref={stageRef}
+                    className={`app-shell__phone-pitch-stage${
+                      canStartTerminalSequence ? ' app-shell__phone-pitch-stage--waiting' : ''
+                    }`}
+                    onClick={canStartTerminalSequence ? handleStartTerminalSequence : undefined}
+                  >
+                    <div className="app-shell__phone-pitch-phone-layer">
+                      <div className="app-shell__phone-pitch-phone-shell">
+                        <PhoneFrame
+                          enableStartupSequence={shouldHoldIntroStage}
+                          onStartupSequenceComplete={handleStartupSequenceComplete}
+                          ref={phoneFrameRef}
+                          startupAlert={startupAlert}
+                          startupSequenceKey={startupSequenceKey}
+                          startupShouldBegin={phoneStartupShouldBegin}
+                        >
+                          {phonePreviewApp}
+                        </PhoneFrame>
+                      </div>
+                    </div>
+
+                    {isTerminalIntroActive ? (
+                      <div className="app-shell__phone-pitch-overlay">
+                        <IntroTerminal
+                          layout={introLayout}
+                          onPhoneTrigger={handleIntroPhoneTrigger}
+                          onPhaseComplete={handleTerminalPhaseComplete}
+                          phase={terminalPhase}
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+
+              <div className="app-shell__preview-carousel-panel">
+                <div
+                  aria-hidden={!isDesktopPreview}
+                  className="app-shell__preview-card app-shell__preview-card--desktop"
+                  {...(!isDesktopPreview ? { inert: '' } : {})}
+                >
+                  <div className="desktop-preview-frame">{desktopPreviewApp}</div>
+                </div>
               </div>
             </div>
-
-            {isTerminalIntroActive ? (
-              <div className="app-shell__phone-pitch-overlay">
-                <IntroTerminal
-                  layout={introLayout}
-                  onPhoneTrigger={handleIntroPhoneTrigger}
-                  onPhaseComplete={handleTerminalPhaseComplete}
-                  phase={terminalPhase}
-                />
-              </div>
-            ) : null}
           </div>
-        ) : (
-          <div className="desktop-preview-frame">{previewApp}</div>
         )}
       </section>
     </div>

@@ -382,24 +382,36 @@
     transform: translateX(0) rotate(0deg);
   }
 
+  7% {
+    transform: translateX(-9px) rotate(-1.24deg);
+  }
+
   14% {
-    transform: translateX(-5px) rotate(-0.72deg);
+    transform: translateX(9px) rotate(1.24deg);
+  }
+
+  21% {
+    transform: translateX(-8px) rotate(-1.08deg);
   }
 
   28% {
-    transform: translateX(5px) rotate(0.72deg);
+    transform: translateX(8px) rotate(1deg);
   }
 
-  42% {
-    transform: translateX(-4px) rotate(-0.52deg);
+  38% {
+    transform: translateX(-5px) rotate(-0.66deg);
   }
 
-  56% {
-    transform: translateX(4px) rotate(0.46deg);
+  50% {
+    transform: translateX(5px) rotate(0.58deg);
   }
 
-  72% {
-    transform: translateX(-1.6px) rotate(-0.2deg);
+  64% {
+    transform: translateX(-2.4px) rotate(-0.3deg);
+  }
+
+  78% {
+    transform: translateX(1.6px) rotate(0.2deg);
   }
 
   100% {
