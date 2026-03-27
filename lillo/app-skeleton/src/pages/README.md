@@ -5,7 +5,7 @@ Status: `DRAFT` because the dashboard/alert/admin route composition is in place,
 Files
 - `README.md` (`STABLE`) - folder map for route-level screens and behavior notes.
 - `adminAccess.jsx` (`STABLE`) - admin-route-only support module that owns the temporary document overflow override used by standalone admin pages.
-- `AdminPage.jsx` (`DRAFT`) - standalone `/admin` azienda console kept outside the farmer `AppShell`; it owns memoized search/filter/sort controls and card navigation into customer detail.
+- `AdminPage.jsx` (`DRAFT`) - standalone `/admin` azienda console kept outside the farmer `AppShell`; it owns memoized search/filter/sort controls, the sticky filter-toolbar wrapper, and card navigation into customer detail.
 - `AdminCustomerPage.jsx` (`DRAFT`) - standalone `/admin/customers/:customerId` customer detail view that derives active summary counts from non-resolved customer alerts, adapts admin alert records into the shared alert-detail structure, and renders each customer alert as a collapsed-by-default expandable card.
 - `DashboardPage.jsx` (`DRAFT`) - home route that now embeds the same `Giorgio's farm` profile block with floating critical/medium summary chips in the open bottom-left slot, then shows the enlarged white-theme simulated chatbot recap addressed directly to Giorgio instead of the raw farm-type label.
 - `AlertsPage.jsx` (`DRAFT`) - ranked alerts feed with URL-backed filters, a flatter filter strip, and click-to-select behavior for the dedicated alert detail route.
@@ -21,6 +21,7 @@ Why these live together
 Non-obvious behavior
 - `AdminPage` and `AdminCustomerPage` are intentionally routed outside `AppShell`, so the farmer phone shell and bottom navigation never render on `/admin`.
 - Admin routes temporarily add an `admin-route` class to `html`, `body`, and `#root`, so the document can scroll normally while the farmer preview shell keeps global overflow locked.
+- `AdminPage` keeps the filter `SectionCard` inside a sticky wrapper so the controls pin to the top of the viewport after scroll while preserving the existing card layout and mobile stacking.
 - The imported admin routes open immediately with no local auth check or passcode UI; they only keep the standalone admin document-scroll override.
 - `AdminCustomerPage` intentionally normalizes incomplete admin alert fields (`fieldName`, relative times, missing `sources`, missing integrated copy) into the shared alert-detail shape so the donor admin detail stays visually aligned with the farmer template without rendering any action block.
 - Admin customer alerts are intentionally collapsed by default and expand per-card with a local button state, while the farmer `/alert` detail route keeps its always-open hero plus nested `Integrated` accordion behavior.

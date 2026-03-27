@@ -99,7 +99,7 @@ function AlertDetailBlock({
         </SectionCard>
       ) : null}
 
-      <div className="alert-roadmap" role="group" aria-label={`${alert.title} detail`}>
+      <div className="alert-roadmap" role="group" aria-label={`Dettagli di ${alert.title}`}>
         {showProblems ? (
           <section className="roadmap-step roadmap-step--problems" style={{ '--step-delay': '0ms' }}>
             <header className="roadmap-step__header">
@@ -127,7 +127,7 @@ function AlertDetailBlock({
                   onClick={() => setIsIntegratedOpen((currentValue) => !currentValue)}
                   type="button"
                 >
-                  <span className="roadmap-step__toggle-label">Perche pensiamo sia il problema</span>
+                  <span className="roadmap-step__toggle-label">Perché pensiamo che questo sia il problema</span>
                   <span aria-hidden="true" className={`roadmap-step__toggle-arrow${isIntegratedOpen ? ' is-open' : ''}`} />
                 </button>
 
@@ -136,7 +136,7 @@ function AlertDetailBlock({
             ) : (
               <>
                 <header className="roadmap-step__header">
-                  <h3>Perche pensiamo sia il problema</h3>
+                  <h3>Perché pensiamo che questo sia il problema</h3>
                 </header>
                 {renderIntegratedContent()}
               </>

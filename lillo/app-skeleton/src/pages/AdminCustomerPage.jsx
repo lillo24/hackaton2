@@ -12,27 +12,34 @@ const RESOLVED_ALERT_STATUSES = new Set(['resolved', 'closed', 'dismissed', 'com
 
 function formatAlertTime(alert) {
   if (typeof alert.occurredMinutesAgo === 'number') {
-    return `${alert.occurredMinutesAgo} min ago`;
+    return `${alert.occurredMinutesAgo} min fa`;
   }
 
   if (typeof alert.occurredHoursAgo === 'number') {
-    return `${alert.occurredHoursAgo} h ago`;
+    return `${alert.occurredHoursAgo} h fa`;
   }
 
   if (alert.timestampLabel) {
     return alert.timestampLabel;
   }
 
-  return 'Recent';
+  return 'Recente';
 }
 
 function formatSeverityLabel(value) {
-  return value.charAt(0).toUpperCase() + value.slice(1);
+  const labels = {
+    critical: 'Critico',
+    high: 'Alto',
+    medium: 'Medio',
+    low: 'Basso',
+  };
+
+  return labels[value] ?? value.charAt(0).toUpperCase() + value.slice(1);
 }
 
 function buildFallbackSources(alert) {
-  const signal = alert.sourceSummary ?? alert.summary ?? 'Integrated alert signals are available for this event.';
-  const label = alert.sourceLabel ?? alert.sourceSummary ?? 'Integrated signals';
+  const signal = alert.sourceSummary ?? alert.summary ?? 'Sono disponibili segnali integrati per questo evento.';
+  const label = alert.sourceLabel ?? alert.sourceSummary ?? 'Segnali integrati';
 
   return [
     {
@@ -48,8 +55,14 @@ function normalizeAdminAlert(alert) {
     Array.isArray(alert.sources) && alert.sources.length > 0
       ? alert.sources.map((source, index) => ({
           id: source.id ?? `${alert.id}-source-${index}`,
-          label: source.label ?? source.name ?? source.source ?? 'Integrated signal',
-          signal: source.signal ?? source.summary ?? source.value ?? alert.sourceSummary ?? alert.summary ?? 'Signal detail unavailable.',
+          label: source.label ?? source.name ?? source.source ?? 'Segnale integrato',
+          signal:
+            source.signal ??
+            source.summary ??
+            source.value ??
+            alert.sourceSummary ??
+            alert.summary ??
+            'Dettaglio del segnale non disponibile.',
         }))
       : buildFallbackSources(alert);
 
@@ -57,15 +70,20 @@ function normalizeAdminAlert(alert) {
     id: alert.id,
     severity: alert.severity,
     timestampLabel: formatAlertTime(alert),
-    title: alert.title ?? 'Untitled alert',
-    summary: alert.summary ?? alert.sourceSummary ?? 'No summary available for this alert.',
+    title: alert.title ?? 'Allerta senza titolo',
+    summary: alert.summary ?? alert.sourceSummary ?? 'Nessun riepilogo disponibile per questa allerta.',
     field: {
-      name: alert.field?.name ?? alert.fieldName ?? 'Unknown field',
+      name: alert.field?.name ?? alert.fieldName ?? 'Appezzamento sconosciuto',
     },
     status: alert.status,
     sources: normalizedSources,
-    integratedSummary: alert.integratedSummary ?? alert.whyTriggered ?? alert.summary ?? alert.sourceSummary ?? 'Integrated explanation unavailable.',
-    riskLine: typeof alert.riskScore === 'number' ? `${alert.riskScore}% ${formatSeverityLabel(alert.severity)} risk` : null,
+    integratedSummary:
+      alert.integratedSummary ??
+      alert.whyTriggered ??
+      alert.summary ??
+      alert.sourceSummary ??
+      'Spiegazione integrata non disponibile.',
+    riskLine: typeof alert.riskScore === 'number' ? `Rischio ${formatSeverityLabel(alert.severity).toLowerCase()} ${alert.riskScore}%` : null,
   };
 }
 
@@ -166,7 +184,6 @@ function AdminCustomerPage() {
     [activeAlerts],
   );
   const alertFilterCount = alertFilter === 'resolved' ? resolvedAlerts.length : activeAlerts.length;
-  const alertFilterLabel = alertFilter === 'resolved' ? 'resolved' : 'active';
 
   if (!customer) {
     return (
@@ -174,12 +191,12 @@ function AdminCustomerPage() {
         <main className="admin-page admin-page--detail">
           <SectionCard>
             <div className="admin-empty-state admin-empty-state--detail">
-              <p className="admin-access__eyebrow">Admin customer</p>
-              <h1>Customer not found</h1>
-              <p>The requested customer record does not exist in the current mock admin data set.</p>
+              <p className="admin-access__eyebrow">Cliente admin</p>
+              <h1>Cliente non trovato</h1>
+              <p>Il record cliente richiesto non esiste nell'attuale set di dati mock dell'admin.</p>
               <div className="admin-inline-actions">
                 <Link className="admin-button admin-button--primary" to="/admin">
-                  Back to admin
+                  Torna all'admin
                 </Link>
               </div>
             </div>
@@ -198,17 +215,17 @@ function AdminCustomerPage() {
           trailing={
             <div className="admin-header-actions">
               <Link className="admin-button admin-button--ghost" to="/admin">
-                Back to admin
+                Torna all'admin
               </Link>
             </div>
           }
         />
 
         <SectionCard>
-          <section className="admin-customer-hero" aria-label="Customer overview">
+          <section className="admin-customer-hero" aria-label="Panoramica cliente">
             <div className="admin-customer-hero__header">
               <div>
-                <p className="admin-access__eyebrow">Customer profile</p>
+                <p className="admin-access__eyebrow">Profilo cliente</p>
                 <h2 className="admin-customer-hero__title">{customer.farmName}</h2>
               </div>
               <span className="admin-plan-chip">{customer.servicePlan}</span>
@@ -216,66 +233,66 @@ function AdminCustomerPage() {
 
             <div className="admin-customer-hero__meta">
               <div>
-                <span>Location</span>
+                <span>Località</span>
                 <strong>{customer.locationLabel}</strong>
               </div>
               <div>
-                <span>Region</span>
+                <span>Area</span>
                 <strong>{customer.region}</strong>
               </div>
               <div>
-                <span>Crop type</span>
+                <span>Coltura</span>
                 <strong>{customer.cropType}</strong>
               </div>
               <div>
-                <span>Surface</span>
+                <span>Superficie</span>
                 <strong>{customer.hectares} ha</strong>
               </div>
               <div>
-                <span>Parcels</span>
+                <span>Appezzamenti</span>
                 <strong>{customer.parcelCount}</strong>
               </div>
               <div>
-                <span>Status</span>
+                <span>Stato</span>
                 <strong>{customer.status}</strong>
               </div>
             </div>
           </section>
         </SectionCard>
 
-        <section className="admin-stats admin-stats--detail" aria-label="Customer alert summary">
+        <section className="admin-stats admin-stats--detail" aria-label="Riepilogo allerte cliente">
           <SectionCard>
-            <p className="admin-stat__label">Total alerts</p>
+            <p className="admin-stat__label">Allerte totali</p>
             <strong className="admin-stat__value">{activeAlerts.length}</strong>
           </SectionCard>
           <SectionCard>
-            <p className="admin-stat__label">Critical</p>
+            <p className="admin-stat__label">Critiche</p>
             <strong className="admin-stat__value">{activeSeverityCounts.critical}</strong>
           </SectionCard>
           <SectionCard>
-            <p className="admin-stat__label">High</p>
+            <p className="admin-stat__label">Alte</p>
             <strong className="admin-stat__value">{activeSeverityCounts.high}</strong>
           </SectionCard>
           <SectionCard>
-            <p className="admin-stat__label">Medium</p>
+            <p className="admin-stat__label">Medie</p>
             <strong className="admin-stat__value">{activeSeverityCounts.medium}</strong>
           </SectionCard>
           <SectionCard>
-            <p className="admin-stat__label">Low</p>
+            <p className="admin-stat__label">Basse</p>
             <strong className="admin-stat__value">{activeSeverityCounts.low}</strong>
           </SectionCard>
         </section>
 
-        <section className="admin-alert-listing" aria-label="Customer alerts">
+        <section className="admin-alert-listing" aria-label="Allerte cliente">
           <div className="admin-results__header">
             <div className="admin-results__header-copy">
               <p className="admin-results__count">
-                {alertFilterCount} {alertFilterLabel} {alertFilterCount === 1 ? 'alert' : 'alerts'}
+                {alertFilterCount} {alertFilterCount === 1 ? 'allerta' : 'allerte'} {alertFilter === 'resolved' ? 'risolte' : 'attive'}
               </p>
             </div>
 
             <div
-              aria-label="Filter customer alerts by status"
+              aria-label="Filtra le allerte del cliente per stato"
               className="admin-alert-toggle"
               role="tablist"
             >
@@ -286,7 +303,7 @@ function AdminCustomerPage() {
                 role="tab"
                 type="button"
               >
-                Active
+                Attive
               </button>
               <button
                 aria-selected={alertFilter === 'resolved'}
@@ -295,7 +312,7 @@ function AdminCustomerPage() {
                 role="tab"
                 type="button"
               >
-                Resolved
+                Risolte
               </button>
             </div>
           </div>
@@ -309,11 +326,11 @@ function AdminCustomerPage() {
           ) : (
             <SectionCard>
               <div className="admin-empty-state admin-empty-state--detail">
-                <h2>{alertFilter === 'resolved' ? 'No resolved alerts' : 'No active alerts'}</h2>
+                <h2>{alertFilter === 'resolved' ? 'Nessuna allerta risolta' : 'Nessuna allerta attiva'}</h2>
                 <p>
                   {alertFilter === 'resolved'
-                    ? 'Resolved customer alerts will appear here once issues are closed in the mock admin console.'
-                    : 'This account is currently quiet in the mock admin console. New alerts will appear here when generated.'}
+                    ? 'Le allerte risolte del cliente compariranno qui una volta chiusi i relativi problemi nella console admin mock.'
+                    : 'Questo account al momento non presenta criticità nella console admin mock. Le nuove allerte compariranno qui quando verranno generate.'}
                 </p>
               </div>
             </SectionCard>

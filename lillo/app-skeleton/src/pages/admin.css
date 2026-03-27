@@ -145,6 +145,21 @@
   align-items: end;
 }
 
+.admin-toolbar-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding-bottom: 0.35rem;
+  background: linear-gradient(180deg, rgba(248, 251, 246, 0.98), rgba(248, 251, 246, 0.9) 78%, rgba(248, 251, 246, 0));
+  backdrop-filter: blur(6px);
+}
+
+.admin-toolbar-sticky > .section-card {
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 28px rgba(32, 51, 37, 0.08);
+}
+
 .admin-results {
   display: grid;
   gap: 0.8rem;
@@ -621,6 +636,10 @@
 @media (max-width: 700px) {
   .admin-shell {
     padding: 1rem 0.85rem 2rem;
+  }
+
+  .admin-toolbar-sticky {
+    top: 0;
   }
 
   .admin-stats,

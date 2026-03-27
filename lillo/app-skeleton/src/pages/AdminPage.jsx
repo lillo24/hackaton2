@@ -95,59 +95,60 @@ function AdminPage() {
     <div className="admin-shell">
       <main className="admin-page">
         <PageHeader
-          description="Azienda-side customer overview for monitoring alert load, service coverage, and accounts that need quick follow-up."
+          description="Panoramica clienti per monitorare il carico di allerte, la copertura del servizio e gli account che richiedono un intervento rapido."
           title="Admin"
           trailing={
             <div className="admin-header-actions">
               <Link className="admin-button admin-button--ghost" to="/dashboard?mode=roadmap">
-                Back to roadmap
+                Torna alla roadmap
               </Link>
             </div>
           }
         />
 
-        <section className="admin-stats" aria-label="Admin summary">
+        <section className="admin-stats" aria-label="Riepilogo admin">
           <SectionCard>
-            <p className="admin-stat__label">Total customers</p>
+            <p className="admin-stat__label">Clienti totali</p>
             <strong className="admin-stat__value">{summaryStats.totalCustomers}</strong>
           </SectionCard>
           <SectionCard>
-            <p className="admin-stat__label">Total active alerts</p>
+            <p className="admin-stat__label">Allerte attive totali</p>
             <strong className="admin-stat__value">{summaryStats.totalActiveAlerts}</strong>
           </SectionCard>
           <SectionCard>
-            <p className="admin-stat__label">Customers with critical alerts</p>
+            <p className="admin-stat__label">Clienti con allerte critiche</p>
             <strong className="admin-stat__value">{summaryStats.customersWithCriticalAlerts}</strong>
           </SectionCard>
           <SectionCard>
-            <p className="admin-stat__label">Average alerts per customer</p>
+            <p className="admin-stat__label">Media allerte per cliente</p>
             <strong className="admin-stat__value">{formatAverage(summaryStats.averageAlerts)}</strong>
           </SectionCard>
         </section>
 
-        <SectionCard>
-          <div className="admin-toolbar">
-            <label className="filter-field" htmlFor="admin-search">
-              Search
+        <div className="admin-toolbar-sticky">
+          <SectionCard>
+            <div className="admin-toolbar">
+              <label className="filter-field" htmlFor="admin-search">
+              Cerca
               <input
                 className="filter-control"
                 id="admin-search"
                 onChange={(event) => setSearchValue(event.target.value)}
-                placeholder="Search farmer, farm, or location"
+                placeholder="Cerca agricoltore, azienda o località"
                 type="search"
                 value={searchValue}
               />
-            </label>
+              </label>
 
             <label className="filter-field" htmlFor="admin-location">
-              Location
+              Località
               <select
                 className="filter-control"
                 id="admin-location"
                 onChange={(event) => setLocationFilter(event.target.value)}
                 value={locationFilter}
               >
-                <option value="all">All locations</option>
+                <option value="all">Tutte le località</option>
                 {locationOptions.map((location) => (
                   <option key={location} value={location}>
                     {location}
@@ -157,41 +158,42 @@ function AdminPage() {
             </label>
 
             <label className="filter-field" htmlFor="admin-alert-volume">
-              Alert volume
+              Numero di allerte
               <select
                 className="filter-control"
                 id="admin-alert-volume"
                 onChange={(event) => setAlertVolumeFilter(event.target.value)}
                 value={alertVolumeFilter}
               >
-                <option value="all">All</option>
-                <option value="zero">0 alerts</option>
-                <option value="one-two">1-2 alerts</option>
-                <option value="three-five">3-5 alerts</option>
-                <option value="six-plus">6+ alerts</option>
+                <option value="all">Tutte</option>
+                <option value="zero">0 allerte</option>
+                <option value="one-two">1-2 allerte</option>
+                <option value="three-five">3-5 allerte</option>
+                <option value="six-plus">6+ allerte</option>
               </select>
             </label>
 
             <label className="filter-field" htmlFor="admin-sort">
-              Sort
+              Ordina
               <select
                 className="filter-control"
                 id="admin-sort"
                 onChange={(event) => setSortValue(event.target.value)}
                 value={sortValue}
               >
-                <option value="most-alerts">Most alerts</option>
-                <option value="least-alerts">Least alerts</option>
-                <option value="name">Name A-Z</option>
+                <option value="most-alerts">Più allerte</option>
+                <option value="least-alerts">Meno allerte</option>
+                <option value="name">Nome A-Z</option>
               </select>
             </label>
-          </div>
-        </SectionCard>
+            </div>
+          </SectionCard>
+        </div>
 
         <section className="admin-results">
           <div className="admin-results__header">
             <p className="admin-results__count">
-              {filteredCustomers.length} {filteredCustomers.length === 1 ? 'customer' : 'customers'}
+              {filteredCustomers.length} {filteredCustomers.length === 1 ? 'cliente' : 'clienti'}
             </p>
           </div>
 
@@ -199,7 +201,7 @@ function AdminPage() {
             <div className="admin-grid">
               {filteredCustomers.map((customer) => (
                 <Link
-                  aria-label={`Open ${customer.farmerName} details`}
+                  aria-label={`Apri i dettagli di ${customer.farmerName}`}
                   className="admin-customer-link"
                   key={customer.id}
                   to={`/admin/customers/${customer.id}`}
@@ -223,33 +225,33 @@ function AdminPage() {
 
                     <div className="admin-customer-card__metrics">
                       <div>
-                        <span>Surface</span>
+                        <span>Superficie</span>
                         <strong>{customer.hectares} ha</strong>
                       </div>
                       <div>
-                        <span>Parcels</span>
+                        <span>Appezzamenti</span>
                         <strong>{customer.parcelCount}</strong>
                       </div>
                       <div>
-                        <span>Active alerts</span>
+                        <span>Allerte attive</span>
                         <strong>{customer.activeAlerts}</strong>
                       </div>
                     </div>
 
                     <div className="admin-alert-chip-row">
-                      <span className="admin-alert-chip admin-alert-chip--critical">{customer.criticalAlerts} critical</span>
-                      <span className="admin-alert-chip admin-alert-chip--high">{customer.highAlerts} high</span>
-                      <span className="admin-alert-chip admin-alert-chip--medium">{customer.mediumAlerts} medium</span>
-                      <span className="admin-alert-chip admin-alert-chip--low">{customer.lowAlerts} low</span>
+                      <span className="admin-alert-chip admin-alert-chip--critical">{customer.criticalAlerts} critiche</span>
+                      <span className="admin-alert-chip admin-alert-chip--high">{customer.highAlerts} alte</span>
+                      <span className="admin-alert-chip admin-alert-chip--medium">{customer.mediumAlerts} medie</span>
+                      <span className="admin-alert-chip admin-alert-chip--low">{customer.lowAlerts} basse</span>
                     </div>
 
                     <div className="admin-customer-card__footer">
                       <div>
-                        <span className="admin-customer-card__label">Last alert</span>
+                        <span className="admin-customer-card__label">Ultima allerta</span>
                         <p>{customer.lastAlertLabel}</p>
                       </div>
                       <div>
-                        <span className="admin-customer-card__label">Status</span>
+                        <span className="admin-customer-card__label">Stato</span>
                         <p>{customer.status}</p>
                       </div>
                     </div>
@@ -260,8 +262,8 @@ function AdminPage() {
           ) : (
             <SectionCard>
               <div className="admin-empty-state">
-                <h2>No customers match these filters</h2>
-                <p>Try broadening the location or alert-volume filters, or clear the search term.</p>
+                <h2>Nessun cliente corrisponde a questi filtri</h2>
+                <p>Prova ad ampliare i filtri per località o numero di allerte, oppure cancella il termine di ricerca.</p>
               </div>
             </SectionCard>
           )}
