@@ -186,7 +186,14 @@ function pickProblemIcon(alert) {
 }
 
 function formatChipLabel(value) {
-  return value
+  const labels = {
+    critical: 'Critica',
+    high: 'Alta',
+    medium: 'Media',
+    low: 'Bassa',
+  };
+
+  return labels[value] ?? value
     .split('-')
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(' ');

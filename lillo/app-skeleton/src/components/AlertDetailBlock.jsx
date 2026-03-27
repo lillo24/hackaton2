@@ -4,15 +4,22 @@ import StatusBadge from './StatusBadge';
 
 function formatUrgency(value) {
   if (typeof value !== 'string' || value.length === 0) {
-    return 'Unknown';
+    return 'Sconosciuto';
   }
 
-  return value.charAt(0).toUpperCase() + value.slice(1);
+  const urgencyLabelByValue = {
+    critical: 'Critico',
+    high: 'Alto',
+    medium: 'Medio',
+    low: 'Basso',
+  };
+
+  return urgencyLabelByValue[value] ?? value.charAt(0).toUpperCase() + value.slice(1);
 }
 
 function formatFieldLabel(field) {
   if (!field?.name) {
-    return 'Unknown field';
+    return 'Appezzamento non disponibile';
   }
 
   if (!field.plotCode) {
@@ -29,7 +36,7 @@ function AlertDetailBlock({
   integratedInitiallyOpen = false,
   integratedCollapsible = true,
   integratedPanelId,
-  actionLabel = 'Action to do',
+  actionLabel = 'Cosa fare ora',
   showField = true,
   showAction = true,
   showHeader = true,
@@ -44,7 +51,7 @@ function AlertDetailBlock({
   const safeTopBadges = Array.isArray(topBadges) ? topBadges.filter(Boolean) : [];
   const detailSeverityClass = `alert-detail-page--${alert.severity}`;
   const riskLine =
-    typeof alert.riskScore === 'number' ? `${alert.riskScore}% ${formatUrgency(alert.severity)} risk` : alert.riskLine ?? null;
+    typeof alert.riskScore === 'number' ? `Rischio ${formatUrgency(alert.severity)} ${alert.riskScore}%` : alert.riskLine ?? null;
   const integratedSummary = alert.integratedSummary ?? alert.whyTriggered;
   const integratedDetail = showIntegratedDetail ? alert.relevanceReason ?? null : null;
   const HeadingTag = headingLevel;
@@ -84,7 +91,7 @@ function AlertDetailBlock({
             {showSummary ? <p className="detail-text alert-detail-summary">{alert.summary}</p> : null}
             {showField ? (
               <p className="alert-detail-field">
-                <span className="alert-detail-field-label">Field</span>
+                <span className="alert-detail-field-label">Appezzamento</span>
                 <span>{formatFieldLabel(alert.field)}</span>
               </p>
             ) : null}
@@ -96,7 +103,7 @@ function AlertDetailBlock({
         {showProblems ? (
           <section className="roadmap-step roadmap-step--problems" style={{ '--step-delay': '0ms' }}>
             <header className="roadmap-step__header">
-              <h3>Problems</h3>
+              <h3>Segnali rilevati</h3>
             </header>
             <ul className="roadmap-problem-list">
               {alert.sources.map((source) => (
@@ -120,7 +127,7 @@ function AlertDetailBlock({
                   onClick={() => setIsIntegratedOpen((currentValue) => !currentValue)}
                   type="button"
                 >
-                  <span className="roadmap-step__toggle-label">Integrated</span>
+                  <span className="roadmap-step__toggle-label">Perche pensiamo sia il problema</span>
                   <span aria-hidden="true" className={`roadmap-step__toggle-arrow${isIntegratedOpen ? ' is-open' : ''}`} />
                 </button>
 
@@ -129,7 +136,7 @@ function AlertDetailBlock({
             ) : (
               <>
                 <header className="roadmap-step__header">
-                  <h3>Integrated</h3>
+                  <h3>Perche pensiamo sia il problema</h3>
                 </header>
                 {renderIntegratedContent()}
               </>
