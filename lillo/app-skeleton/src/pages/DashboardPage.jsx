@@ -115,11 +115,9 @@ function buildDashboardTileAlertAssignments(alerts) {
 
 function buildDashboardTileTerrainTreatments() {
   return [
-    // Keep one warm reference tile while the rest try the frozen terrain direction.
-    { tileId: 'tile-1', problem: 'fungus', variant: 'relief', tone: 'preview' },
+    // Keep the warm reference texture on the left parcel while top/bottom fall back to plain green tiles.
     { tileId: 'tile-2', problem: 'frozen', variant: 'frost', tone: 'problem' },
-    { tileId: 'tile-3', problem: 'frozen', variant: 'crystals', tone: 'preview' },
-    { tileId: 'tile-4', problem: 'frozen', variant: 'plates', tone: 'problem' },
+    { tileId: 'tile-4', problem: 'fungus', variant: 'relief', tone: 'preview' },
   ];
 }
 

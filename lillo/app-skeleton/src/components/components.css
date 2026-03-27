@@ -1012,7 +1012,7 @@
 .alert-list-item__side {
   min-width: 0;
   display: grid;
-  justify-items: center;
+  justify-items: flex-end;
   align-content: center;
   gap: 0;
 }
